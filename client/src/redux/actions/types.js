@@ -1,0 +1,10 @@
+export const LOG_IN = 'LOG_IN';
+export const LOG_OUT = 'LOG_OUT';
+export const DELETE_ALERT = 'DELETE_ALERT';
+export const ADD_ALERT = 'ADD_ALERT';
+export const DELETE_ALL_ALERT = 'DELETE_ALL_ALERT';
+export const FETCH_MESSAGES = 'FETCH_MESSAGES';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const SOCKET_CONNECT ='SOCKET_CONNECT';
+export const SOCKET_DISCONNECT ='SOCKET_DISCONNECT';
+export const CLEAR_MESSAGES ='CLEAR_MESSAGES';

@@ -1,0 +1,25 @@
+{
+    "users":[
+        {
+          "id": 1,
+          "username": "hossein22",
+          "password": "1234",
+          "name": "محمد حسین جنیدی",
+          "avatar": "/"
+        },
+        {
+          "id": 2,
+          "username": "hamid79",
+          "password": "1122",
+          "name": "Hamidreza Akbari",
+          "avatar": "/"
+        },
+        {
+          "id": 3,
+          "username": "mehdi",
+          "password": "1111",
+          "name": "mehdi azimi",
+          "avatar": "/"
+        }
+      ]
+}
