@@ -8,6 +8,10 @@ import Footer from './Footer';
 const useStyle = makeStyles(theme=> ({
     root: {
         flexBasis: '100%',
+        padding : 0,
+        [theme.breakpoints.up('sm')]: {
+            padding: '1.5rem'
+        }
     },
     main: {
         backgroundColor: theme.palette.background.light,
@@ -19,7 +23,7 @@ const useStyle = makeStyles(theme=> ({
 const Layout = (props) => {
     const classes = useStyle();
     return (
-        <Grid id='mainContainer' container direction='column' component={Container} fixed className={classes.root}>
+        <Grid container direction='column' component={Container} fixed className={classes.root}>
                 <Header/>
                 <Grid item container direction='column' className={classes.main} component='main'>
                 <ShowAlerts />

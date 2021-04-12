@@ -4,9 +4,24 @@ const theme = createMuiTheme({
     direction: 'rtl',
     palette: {
       background: {
-        default: "#ccc",
-        light: "#F3F5FF",
+        default: '#ccc',
+        light: '#fff'
       },
+      type: 'light',
+    },
+    overrides: {
+      MuiCssBaseline: {
+        '@global': {
+          body: {
+            direction: 'rtl',
+          },
+          '#root': {
+            height: '100vh',
+            display: 'flex',
+            flexFlow: 'column wrap',
+          }
+        }
+      }
     },
     typography: {
         fontFamily: [

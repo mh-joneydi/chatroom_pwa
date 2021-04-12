@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import theme from './styles/theme';
-import './styles/index.css'
+import './styles/fonts.css'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import App from './App';
 import store from './redux/store';

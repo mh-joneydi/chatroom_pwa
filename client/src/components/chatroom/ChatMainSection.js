@@ -1,7 +1,6 @@
 import { CircularProgress, Grid } from '@material-ui/core';
-import useStyle from './styles';
 import $ from 'jquery';
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { fetchMessages } from '../../redux/actions';
 import ChatMessage from './ChatMessage';
@@ -11,7 +10,7 @@ const styles = ( theme => ({
     chatMain: {
         flexGrow: 1,
         flexBasis: 1,
-        padding: theme.spacing(0,1.5),
+        padding: theme.spacing(1.2),
         overflowY: 'scroll',
         '&::-webkit-scrollbar': {
             backgroundColor: theme.palette.primary.light,
@@ -52,7 +51,6 @@ class ChatMainSection extends React.PureComponent {
         this.setState({ loading: false });
     }
     componentDidUpdate() {
-        console.log('updated')
         const chatScroll = this.props.chatMainSection.current;
         
         if ( (chatScroll.scrollTop + chatScroll.clientHeight <= chatScroll.scrollHeight) && (chatScroll.scrollHeight - 200 <= chatScroll.scrollTop + chatScroll.clientHeight) ){
@@ -70,7 +68,7 @@ class ChatMainSection extends React.PureComponent {
                     </Grid> 
                 }
                 { 
-                    this.props.messages.map( message=> (<ChatMessage message={message} />))
+                    this.props.messages.map( message=> (<ChatMessage key={message.id} userId={this.props.user.id}  message={message} />))
                 }
             </Grid>
         )
@@ -78,7 +76,8 @@ class ChatMainSection extends React.PureComponent {
 }
 
 const mapStateToProps = state=> ({
-    messages: Object.values(state.messages)
+    messages: Object.values(state.messages),
+    user: state.user
 })
 
 export default connect(mapStateToProps, {fetchMessages})(withStyles(styles)(ChatMainSection));
