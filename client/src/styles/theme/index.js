@@ -5,7 +5,8 @@ const theme = createMuiTheme({
     palette: {
       background: {
         default: '#ccc',
-        light: '#fff'
+        light: '#fff',
+        chatMain: '#eee'
       },
       type: 'light',
     },

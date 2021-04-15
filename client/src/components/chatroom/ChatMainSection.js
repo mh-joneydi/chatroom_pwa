@@ -9,9 +9,10 @@ import { withStyles } from '@material-ui/styles';
 const styles = ( theme => ({
     chatMain: {
         flexGrow: 1,
+        backgroundColor: theme.palette.background.chatMain ,
         flexBasis: 1,
         padding: theme.spacing(1.2),
-        overflowY: 'scroll',
+        overflowY: 'auto',
         '&::-webkit-scrollbar': {
             backgroundColor: theme.palette.primary.light,
             width: '8px'
@@ -32,28 +33,26 @@ const styles = ( theme => ({
             color: '#fff',
             padding: theme.spacing(0.3)
         }
-    },
-    hideScrollBar: {
-        '&::-webkit-scrollbar': {
-            display: 'none'
-        },
     }
 }))
 
 class ChatMainSection extends React.PureComponent {
     state = {
-        loading : !!(this.props.messages)
+        loading : true
     }
     async componentDidMount() {
         const chatScroll = this.props.chatMainSection.current;
-        await this.props.fetchMessages();
         chatScroll.scrollTop = chatScroll.scrollHeight;
-        this.setState({ loading: false });
+        await this.props.fetchMessages();
+        if(this.state.loading) {
+            chatScroll.scrollTop = chatScroll.scrollHeight;
+            this.setState({ loading: false });
+        }
     }
     componentDidUpdate() {
         const chatScroll = this.props.chatMainSection.current;
         
-        if ( (chatScroll.scrollTop + chatScroll.clientHeight <= chatScroll.scrollHeight) && (chatScroll.scrollHeight - 200 <= chatScroll.scrollTop + chatScroll.clientHeight) ){
+        if ( chatScroll.scrollHeight - 100 <= chatScroll.scrollTop + chatScroll.clientHeight ){
             $(chatScroll).animate({
                 scrollTop: chatScroll.scrollHeight
             }, 500) 
@@ -61,9 +60,9 @@ class ChatMainSection extends React.PureComponent {
     }
     render() {
         return (
-            <Grid container item alignContent='flex-start' className={`${this.props.classes.chatMain} ${this.state.loading && this.props.classes.hideScrollBar}`} ref={this.props.chatMainSection}>
+            <Grid container item alignContent='flex-start' className={this.props.classes.chatMain} ref={this.props.chatMainSection}>
                 {this.state.loading &&
-                    <Grid xs={12} container justify='center' alignItems='center' className={this.props.classes.loading}>
+                    <Grid xs={12} container justify='center' alignItems='center' className={`${this.props.classes.loading}`} style={!!this.props.messages.length? {height: '70px'} : null}>
                         <CircularProgress size={40} />
                     </Grid> 
                 }

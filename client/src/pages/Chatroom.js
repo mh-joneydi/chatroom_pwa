@@ -45,9 +45,13 @@ const Chatroom = ({addMessage, user,socket}) => {
             time: date
         }
         addMessage({...newMessage, sending: true});
-        $(chatMainSection.current).animate({
-            scrollTop: chatMainSection.current.scrollHeight
-          }, 200);
+        const chatScroll = chatMainSection.current;
+        if ( chatScroll.scrollHeight - 100 >= chatScroll.scrollTop + chatScroll.clientHeight ){
+            console.log('done')
+            $(chatScroll).animate({
+                scrollTop: chatScroll.scrollHeight
+            }, 200);
+        }
         socket.emit("newMessage", newMessage );
     }
     console.log(chatMainSection.current)

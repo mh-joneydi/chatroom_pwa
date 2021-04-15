@@ -12,6 +12,7 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.1",
     "axios": "^0.21.1",
+    "date-fns": "^2.21.1",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "react": "^17.0.1",
