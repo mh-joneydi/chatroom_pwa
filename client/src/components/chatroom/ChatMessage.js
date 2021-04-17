@@ -25,12 +25,19 @@ const useStyle = makeStyles( theme => ({
         borderBottomRightRadius: '7px',
         background: theme.palette.primary.light,
         color: 'white',
+        color: 'white',
         '&::before': {
             transform: 'rotate(60deg)',
             background: theme.palette.primary.light,
             right: '-2px',
             bottom: '5px',
         },
+    },
+    rightBuble2: {
+        padding: theme.spacing(1,2,0.3),
+        background: theme.palette.primary.light,
+        color: 'white',
+        marginTop: 0
     },
     leftBuble: {
         padding: theme.spacing(0.75,1.5),
@@ -44,12 +51,22 @@ const useStyle = makeStyles( theme => ({
             bottom: '7px',
         }
     },
+    leftBuble2: {
+        padding: theme.spacing(0.75,1.5),
+        textAlign: 'left',
+        background: '#FFF',
+        color: '#666',
+        marginTop: 0
+    },
+    avatarContainer: {
+        width: '50px'
+    },
     avatar: {
-        margin: '0.5rem',
+        margin: '0.1rem',
         boxShadow: theme.shadows[2],
         backgroundColor: theme.palette.secondary.main,
         fontSize: '0.9rem',
-        color: '#fff'
+        color: '#fff',
     },
     time: {
         fontSize: '0.6rem',
@@ -68,15 +85,14 @@ const useStyle = makeStyles( theme => ({
     }
 }))
 
-const ChatMessage = ({message, userId}) => {
+const ChatMessage = ({message, userId, prevId}) => {
     const classes = useStyle();
-    console.log(message)
     return (
         <>
             {
                 userId === message.from.id ? (
                     <Grid item container direction='row-reverse' xs={12}>
-                        <Grid item container direction='column' className={`${classes.buble} ${classes.rightBuble}`}>
+                        <Grid item container direction='column' className={`${classes.buble} ${prevId === message.from.id ? classes.rightBuble2 : classes.rightBuble}`}>
                             <Grid item>
                                 {message.message}
                             </Grid>
@@ -102,13 +118,18 @@ const ChatMessage = ({message, userId}) => {
                     </Grid>
                 ) : (
                     <Grid item container xs={12} alignItems='flex-end'>
-                        <Grid item>
-                            <Avatar src={message.from.avatar} alt={message.from.name} className={classes.avatar} />
+                        <Grid item className={classes.avatarContainer}>
+                            {
+                                prevId !== message.from.id && <Avatar src={message.from.avatar} alt={message.from.name} className={classes.avatar} />
+                            }
                         </Grid>
-                        <Grid item container direction='column' className={`${classes.buble} ${classes.leftBuble}`}>
-                            <Grid item className={classes.name}>
-                                {message.from.name}
-                            </Grid>
+                        <Grid item container direction='column' className={`${classes.buble} ${prevId === message.from.id ? classes.leftBuble2 : classes.leftBuble}`}>
+                            {
+                                prevId !== message.from.id &&
+                                <Grid item className={classes.name}>
+                                    {message.from.name}
+                                </Grid>
+                            }
                             <Grid item>
                                 {message.message}
                             </Grid>

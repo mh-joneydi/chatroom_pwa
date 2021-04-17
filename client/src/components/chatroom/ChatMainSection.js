@@ -59,6 +59,7 @@ class ChatMainSection extends React.PureComponent {
         }
     }
     render() {
+        let prevId;
         return (
             <Grid container item alignContent='flex-start' className={this.props.classes.chatMain} ref={this.props.chatMainSection}>
                 {this.state.loading &&
@@ -67,7 +68,11 @@ class ChatMainSection extends React.PureComponent {
                     </Grid> 
                 }
                 { 
-                    this.props.messages.map( message=> (<ChatMessage key={message.id} userId={this.props.user.id}  message={message} />))
+                    this.props.messages.map( message=> {
+                        const messageComponent = <ChatMessage key={message.id} userId={this.props.user.id} prevId={prevId}  message={message} />;
+                        prevId = message.from.id
+                        return (messageComponent)
+                    })
                 }
             </Grid>
         )
