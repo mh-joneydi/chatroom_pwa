@@ -41,39 +41,31 @@ class ChatMainSection extends React.PureComponent {
         loading : true
     }
     async componentDidMount() {
-        const chatScroll = this.props.chatMainSection.current;
-        chatScroll.scrollTop = chatScroll.scrollHeight;
+        this.scrollToBottom();
         await this.props.fetchMessages();
-        if(this.state.loading) {
-            chatScroll.scrollTop = chatScroll.scrollHeight;
-            this.setState({ loading: false });
-        }
+        this.scrollToBottom();
+        this.setState({ loading: false });
     }
-    componentDidUpdate() {
-        const chatScroll = this.props.chatMainSection.current;
-        
-        if ( chatScroll.scrollHeight - 100 <= chatScroll.scrollTop + chatScroll.clientHeight ){
-            $(chatScroll).animate({
-                scrollTop: chatScroll.scrollHeight
-            }, 500) 
-        }
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView();
+        console.log(this.messagesEnd.offsetTop)
     }
     render() {
         let prevId;
         return (
             <Grid container item alignContent='flex-start' className={this.props.classes.chatMain} ref={this.props.chatMainSection}>
-                {this.state.loading &&
-                    <Grid xs={12} container justify='center' alignItems='center' className={`${this.props.classes.loading}`} style={!!this.props.messages.length? {height: '70px'} : null}>
+                {this.state.loading && 
+                    <Grid item xs={12} container justify='center' alignItems='center' className={`${this.props.classes.loading}`} style={!!this.props.messages.length? {height: '70px'} : null}>
                         <CircularProgress size={40} />
                     </Grid> 
-                }
-                { 
+                }{
                     this.props.messages.map( message=> {
                         const messageComponent = <ChatMessage key={message.id} userId={this.props.user.id} prevId={prevId}  message={message} />;
                         prevId = message.from.id
                         return (messageComponent)
                     })
                 }
+                <div style={{ float:"left", clear: "both" }} ref={(el) => { this.messagesEnd = el; }}></div>
             </Grid>
         )
     }

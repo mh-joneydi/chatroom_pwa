@@ -22,8 +22,13 @@ const Chatroom = ({addMessage, user,socket}) => {
     socket._callbacks.$connecting[0]()
     useEffect(()=> {
         socket.on("newMessage", (message) => {
-            console.log(message)
             addMessage(message);
+            const chatScroll = chatMainSection.current;
+            if ( chatScroll.scrollHeight - 100 <= chatScroll.scrollTop + chatScroll.clientHeight ){
+                $(chatScroll).animate({
+                    scrollTop: chatScroll.scrollHeight
+                }, 200);
+            }
           })
           return ()=>{
             socket._callbacks.$newMessage = []
@@ -47,7 +52,6 @@ const Chatroom = ({addMessage, user,socket}) => {
         addMessage({...newMessage, sending: true});
         const chatScroll = chatMainSection.current;
         if ( chatScroll.scrollHeight - 100 >= chatScroll.scrollTop + chatScroll.clientHeight ){
-            console.log('done')
             $(chatScroll).animate({
                 scrollTop: chatScroll.scrollHeight
             }, 200);
