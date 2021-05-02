@@ -41,7 +41,7 @@ const ChatSendSection = ({submit}) => {
     const classes = useStyle(),
     [messageValue, setMessageValue] = useState(''),
     handeSubmit = ()=>{
-        submit(messageValue);
+        submit(messageValue.trim());
         setMessageValue('')
     },
     handleChange = (e)=> {
@@ -49,7 +49,7 @@ const ChatSendSection = ({submit}) => {
     }
 
     return (
-        <Grid item container alignItems='center' className={classes.chatSendSection}>
+        <Grid item container alignItems='center' className={classes.chatSendSection} component='footer'>
             <Grid item >
                 <IconButton  size='small'><Mood style={{ fontSize: '1.7rem' }}/> </IconButton>
             </Grid>

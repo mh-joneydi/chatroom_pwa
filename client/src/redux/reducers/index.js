@@ -4,6 +4,7 @@ import userReducer from './userReducer';
 import alertReducer from './alertReducer';
 import chatReducer from './chatReducer';
 import socketReducer from './socketReducer';
+import chatMembersReducer from './chatMembersReducer';
 
 
 
@@ -13,4 +14,5 @@ export default combineReducers({
     alerts: alertReducer,
     messages: chatReducer,
     socket: socketReducer,
+    members: chatMembersReducer
 });

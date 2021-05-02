@@ -8,7 +8,9 @@ import {
     ADD_MESSAGE,
     CLEAR_MESSAGES,
     SOCKET_CONNECT,
-    SOCKET_DISCONNECT
+    SOCKET_DISCONNECT,
+    FETCH_MEMBERS,
+    CLEAR_MEMBERS
 } from './types';
 import {
     users,
@@ -63,6 +65,7 @@ export const logOut = ()=> dispach=> {
     });
     dispach(socketDisonnect());
     dispach(clearMessages());
+    dispach(clearMembers());
 }
 export const setLogIn = (loginFormValues, path) => async dispach => {
     const data = await users.get(`?username=${loginFormValues.username}&password=${loginFormValues.password}`).then( res=> res.data)
@@ -102,6 +105,11 @@ export const setLogIn = (loginFormValues, path) => async dispach => {
         history.push('/');
         dispach(addAlert({name: 'logout', text: `شما با موفقیت خارج شدید.`}));
     } 
+    
+    export const signupUser = () => dispach => {
+
+    }
+    
     /******* USER ACTIONS***********/
 
     
@@ -126,4 +134,20 @@ export const setLogIn = (loginFormValues, path) => async dispach => {
         type: CLEAR_MESSAGES
     })
 
+    export const fetch_members = (currentUserId)=> async(dispach)=> {
+        users.get()
+        .then( res => {
+            dispach({
+                type: FETCH_MEMBERS,
+                payload: [...res.data.filter( user => user.id !== currentUserId ).map( member => member.name), 'شما']
+            })
+        })
+        .catch( err=> {
+            dispach(addAlert({name: 'serverError', text: 'خطا در برقراری ارتباط با سرور', severity: 'error'}))
+        })
+        
+    }
+    export const clearMembers = ()=> ({
+        type: CLEAR_MEMBERS
+    })
     /********** CHATROOM ACTIONS ***********/

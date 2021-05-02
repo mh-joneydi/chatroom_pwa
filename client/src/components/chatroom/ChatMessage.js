@@ -11,20 +11,23 @@ const useStyle = makeStyles( theme => ({
         width: 'fit-content',
         maxWidth: '70%',
         position: 'relative',
-        wordBreak: 'break-word',
         boxShadow: theme.shadows[1],
         '&::before': {
             content: "''",
             width: '12px',
             height: '12px',
             position: 'absolute'
+        },
+        '& pre': {
+            fontFamily: 'Sahel',
+            wordBreak: 'break-word',
+            whiteSpace: 'pre-wrap'
         }
     },
     rightBuble: {
         padding: theme.spacing(1,2,0.3),
         borderBottomRightRadius: '7px',
         background: theme.palette.primary.light,
-        color: 'white',
         color: 'white',
         '&::before': {
             transform: 'rotate(60deg)',
@@ -92,8 +95,8 @@ const ChatMessage = ({message, userId, prevId}) => {
             {
                 userId === message.from.id ? (
                     <Grid item container direction='row-reverse' xs={12}>
-                        <Grid item container direction='column' className={`${classes.buble} ${prevId === message.from.id ? classes.rightBuble2 : classes.rightBuble}`}>
-                            <Grid item>
+                        <Grid item container direction='column' className={`${classes.buble} ${prevId === message.from.id ? classes.rightBuble2 : classes.rightBuble}`} onContextMenu={()=> alert(`Reply : ${message.message}`)}>
+                            <Grid item component='pre'>
                                 {message.message}
                             </Grid>
                             <Grid item container alignItems='center' className={classes.time}>
@@ -123,14 +126,14 @@ const ChatMessage = ({message, userId, prevId}) => {
                                 prevId !== message.from.id && <Avatar src={message.from.avatar} alt={message.from.name} className={classes.avatar} />
                             }
                         </Grid>
-                        <Grid item container direction='column' className={`${classes.buble} ${prevId === message.from.id ? classes.leftBuble2 : classes.leftBuble}`}>
+                        <Grid item container direction='column' onContextMenu={()=> alert(`Reply : ${message.message}`)} className={`${classes.buble} ${prevId === message.from.id ? classes.leftBuble2 : classes.leftBuble}`}>
                             {
                                 prevId !== message.from.id &&
                                 <Grid item className={classes.name}>
                                     {message.from.name}
                                 </Grid>
                             }
-                            <Grid item>
+                            <Grid item component='pre'>
                                 {message.message}
                             </Grid>
                             <Grid item className={classes.time}  >

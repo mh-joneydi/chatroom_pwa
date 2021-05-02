@@ -9,6 +9,7 @@ import { logIn, logOut } from './redux/actions';
 import { getCookie } from './Cookies';
 import Chatroom from './pages/Chatroom';
 import WithLayoutRoute from './components/HOC/withLayoutRoute';
+import Signup from './pages/Signup';
 
 
 class App extends PureComponent {
@@ -31,6 +32,7 @@ class App extends PureComponent {
             <Switch>
               <WithLayoutRoute path="/" component={Home} exact />
               <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
               <WithLayoutRoute path="/chatroom" component={Chatroom} secret/>
               <WithLayoutRoute component={Err404} />
             </Switch>

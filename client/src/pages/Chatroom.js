@@ -1,12 +1,11 @@
 import { makeStyles } from '@material-ui/styles';
-import React, { createRef, memo, useEffect, useRef } from 'react';
+import React, { createRef, memo, useEffect } from 'react';
 import ChatMainSection from '../components/chatroom/ChatMainSection';
 import ChatHeader from '../components/chatroom/ChatHeader';
 import ChatSendSection from '../components/chatroom/ChatSendSection';
 import { Grid } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { addMessage } from '../redux/actions';
-import { messages } from '../apis';
 import $ from 'jquery';
 
 const useStyle = makeStyles({
@@ -61,7 +60,7 @@ const Chatroom = ({addMessage, user,socket}) => {
     console.log(chatMainSection.current)
     return (
         <Grid container direction='column' className={classes.chatroom} >
-            <ChatHeader/>
+            <ChatHeader />
             <ChatMainSection chatMainSection={chatMainSection} />
             <ChatSendSection submit={handleSend}/>
         </Grid>

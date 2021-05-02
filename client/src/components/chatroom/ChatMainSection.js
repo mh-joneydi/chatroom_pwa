@@ -47,13 +47,14 @@ class ChatMainSection extends React.PureComponent {
         this.setState({ loading: false });
     }
     scrollToBottom = () => {
+        const chatSection = this.props.chatMainSection.current;
         this.messagesEnd.scrollIntoView();
-        console.log(this.messagesEnd.offsetTop)
+        chatSection.scrollTop = chatSection.scrollHeight
     }
     render() {
         let prevId;
         return (
-            <Grid container item alignContent='flex-start' className={this.props.classes.chatMain} ref={this.props.chatMainSection}>
+            <Grid container item alignContent='flex-start' className={this.props.classes.chatMain} ref={this.props.chatMainSection} component='section'>
                 {this.state.loading && 
                     <Grid item xs={12} container justify='center' alignItems='center' className={`${this.props.classes.loading}`} style={!!this.props.messages.length? {height: '70px'} : null}>
                         <CircularProgress size={40} />

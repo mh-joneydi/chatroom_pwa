@@ -2,7 +2,7 @@ import { Avatar, Button, Checkbox, CircularProgress, Container, FormControlLabel
 import { LockOutlined, Visibility, VisibilityOff } from '@material-ui/icons';
 import { withStyles } from '@material-ui/styles';
 import React , {PureComponent} from 'react';
-import { Field , reduxForm, submit } from 'redux-form';
+import { Field , reduxForm } from 'redux-form';
 import {Link as routerLink} from 'react-router-dom';
 import ShowAlerts from './ShowAlerts';
  
@@ -21,8 +21,8 @@ const styles = {
             marginLeft: '12px'
         }
     },
-    copyright: {
-        marginTop: '1.5rem',
+    signupLink: {
+        textAlign: 'right'
     },
     checkbox: {
         direction: 'rtl',
@@ -67,7 +67,7 @@ class LoginForm extends PureComponent{
                 {...props}
                 error={!!(error)}
                 helperText={error}
-                className={this.props.classes.helperText}
+                className={this.props.helperText}
             />
         )
     }
@@ -85,82 +85,83 @@ class LoginForm extends PureComponent{
             await this.props.onSubmit(formValues);
     }
     render() {
-        const { handleSubmit, submitting, error } = this.props;
+        const { handleSubmit, submitting, classes } = this.props;
             return (
-                <Container maxWidth='xs' dir="ltr">
-                    <form onSubmit={handleSubmit(this.onSubmit)} noValidate>
-                        <Grid container direction='column' alignItems='stretch' justify='center' spacing={4} className={this.props.classes.gridContainer}>
-                            <Grid item>
-                                <ShowAlerts/>
-                            </Grid>
-                            <Grid item xs={12} container direction='column' alignItems='center' spacing={1}>
-                                <Grid item >
-                                    <Avatar className={this.props.classes.avater}>
-                                        <LockOutlined />
-                                    </Avatar>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant='h4' color='textPrimary' component='h1'>
-                                        ورود به چت روم
-                                    </Typography>
-                                </Grid>
+                <Container maxWidth='xs' dir="ltr" component='form' onSubmit={handleSubmit(this.onSubmit)} noValidate>
+                    <Grid container direction='column' alignItems='stretch' justify='center' spacing={3} className={classes.gridContainer}>
+                        <Grid item>
+                            <ShowAlerts/>
+                        </Grid>
+                        <Grid item xs={12} container direction='column' alignItems='center' spacing={1}>
+                            <Grid item >
+                                <Avatar className={classes.avater}>
+                                    <LockOutlined />
+                                </Avatar>
                             </Grid>
                             <Grid item>
-                                <Field 
-                                    type="text"
-                                    label="نام کاربری" 
-                                    name="username" 
-                                    placeholder='like hossein'
-                                    component={this.renderField} 
-                                />
-                            </Grid>
-                            <Grid item >
-                                <Field 
-                                    type={this.state.showPass ? 'text' : 'password'} 
-                                    label="گذرواژه" 
-                                    name="password" 
-                                    InputProps={{
-                                        endAdornment: ( 
-                                        <InputAdornment position="end"> 
-                                            <IconButton onClick={
-                                                () => this.setState({
-                                                    showPass : !this.state.showPass
-                                                })
-                                            }>
-                                                {this.state.showPass ? <Visibility /> : <VisibilityOff />}  
-                                            </IconButton> 
-                                        </InputAdornment>
-                                        ),
-                                    }}
-                                    component={this.renderField} 
-                                />
-                            </Grid>
-                            <Grid className={this.props.classes.checkbox}>
-                                <Field 
-                                    type="checkbox" 
-                                    label="مرا به خاطر بسپار" 
-                                    name="remember" 
-                                    component={this.renderCheckbox} 
-                                />
-                            </Grid>
-                            <Grid item >
-                                <Button
-                                    fullWidth
-                                    className={this.props.classes.submitButton}
-                                    type="submit"
-                                    variant='contained'
-                                    color='primary'
-                                    disabled={submitting}
-                                >
-                                    {submitting ? <CircularProgress size={25}/> : 'ورود'}
-                                </Button>
-                            </Grid>
-                            <Grid item className={this.props.classes.copyright}>
-                                <Typography variant='body2' color='textSecondary' align='center'>
-                                    Copyright © <Link component={routerLink} to='/' color='inherit'>Chatroom.ir</Link> 2021</Typography>
+                                <Typography variant='h4' color='textPrimary' component='h1'>
+                                    ورود به چت روم
+                                </Typography>
                             </Grid>
                         </Grid>
-                    </form>
+                        <Grid item>
+                            <Field 
+                                type="text"
+                                label="نام کاربری" 
+                                name="username" 
+                                placeholder='like hossein'
+                                component={this.renderField} 
+                            />
+                        </Grid>
+                        <Grid item >
+                            <Field 
+                                type={this.state.showPass ? 'text' : 'password'} 
+                                label="گذرواژه" 
+                                name="password" 
+                                InputProps={{
+                                    endAdornment: ( 
+                                    <InputAdornment position="end"> 
+                                        <IconButton onClick={
+                                            () => this.setState({
+                                                showPass : !this.state.showPass
+                                            })
+                                        }>
+                                            {this.state.showPass ? <Visibility /> : <VisibilityOff />}  
+                                        </IconButton> 
+                                    </InputAdornment>
+                                    ),
+                                }}
+                                component={this.renderField} 
+                            />
+                        </Grid>
+                        <Grid className={classes.checkbox}>
+                            <Field 
+                                type="checkbox" 
+                                label="مرا به خاطر بسپار" 
+                                name="remember" 
+                                component={this.renderCheckbox} 
+                            />
+                        </Grid>
+                        <Grid item >
+                            <Button
+                                fullWidth
+                                className={classes.submitButton}
+                                type="submit"
+                                variant='contained'
+                                color='primary'
+                                disabled={submitting}
+                            >
+                                {submitting ? <CircularProgress size={25}/> : 'ورود'}
+                            </Button>
+                        </Grid>
+                        <Grid item className={classes.signupLink}>
+                                <Link component={routerLink} to='/signup' >حساب کاربری ندارید؟ عضو شوید</Link>
+                        </Grid>
+                        <Grid item >
+                            <Typography variant='body2' color='textSecondary' align='center'>
+                                Copyright © <Link component={routerLink} to='/' color='inherit'>Chatroom.ir</Link> {new Date().getFullYear()}</Typography>
+                        </Grid>
+                    </Grid>
                 </Container>
             );
         }
