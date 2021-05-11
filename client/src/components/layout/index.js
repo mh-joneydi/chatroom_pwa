@@ -1,37 +1,68 @@
-import { Container, Grid } from '@material-ui/core';
+import { AppBar, Container, Grid, IconButton, isWidthUp, SwipeableDrawer, Toolbar, Typography, withWidth } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import React from 'react';
+import React, { useState } from 'react';
 import ShowAlerts from '../ShowAlerts';
-import Header from './Header';
 import Footer from './Footer';
+import Menu from '@material-ui/icons/Menu';
 
 const useStyle = makeStyles(theme=> ({
     root: {
         flexBasis: '100%',
         padding : 0,
         [theme.breakpoints.up('sm')]: {
-            padding: '1.5rem'
-        }
+            margin: '1.5rem auto'
+        },
+        boxShadow: theme.shadows[5]
+    },
+    toolbarTitle: {
+        flexGrow: 1,
     },
     main: {
         backgroundColor: theme.palette.background.light,
-        boxShadow: '0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%)',
         flexGrow: 1,
     },
 }));
 
-const Layout = (props) => {
-    const classes = useStyle();
+const Layout = ({ children, width }) => {
+    const classes = useStyle(),
+    [open, setOpen] = useState(false),
+    toggleOpen = ()=> {
+        setOpen(!open)
+    }
     return (
-        <Grid container direction='column' component={Container} fixed className={classes.root}>
-                <Header/>
-                <Grid item container direction='column' className={classes.main} component='main'>
-                <ShowAlerts />
-                    {props.children}
+        <Grid container direction='row' component={Container} fixed className={classes.root}>
+                {
+                    isWidthUp('sm', width) ? (
+                        <Grid item>
+                            {/* Drawer Component for Desktop*/}
+                        </Grid>
+                    ) : (
+                        <SwipeableDrawer
+                            open={open}
+                            onClose={toggleOpen}
+                            anchor="right"
+                        >
+                            {/* Drawer Component for Mobile*/}
+                        </SwipeableDrawer>
+                    )
+                }
+                <Grid item container direction='column'>
+                    <Grid item component={AppBar} position='static' color='primary'>
+                            <Toolbar className={classes.toolbar}>
+                            <Typography variant="h6" className={classes.toolbarTitle}>
+                                چت روم 
+                            </Typography>
+                                <IconButton color='inherit' edge='start' onClick={toggleOpen}><Menu/></IconButton>
+                            </Toolbar>
+                    </Grid>
+                    <Grid item container direction='column' className={classes.main} component='main'>
+                    <ShowAlerts />
+                        {children}
+                    </Grid>
+                    <Footer />
                 </Grid>
-                <Footer />
         </Grid>
     );
 };
 
-export default Layout;
+export default withWidth()(Layout);

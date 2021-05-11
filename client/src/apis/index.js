@@ -6,5 +6,5 @@ export const messages =  axios.create({
 });
 //USERS API
 export const users = axios.create({
-    baseURL: 'http://localhost:3001/users'
+    baseURL: 'http://localhost:3001/'
 });

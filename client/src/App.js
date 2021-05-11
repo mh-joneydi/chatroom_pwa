@@ -1,15 +1,13 @@
 import React, { PureComponent } from 'react';
 import Login from './pages/Login';
-import { Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import history from './history';
-import Home from './pages/Home';
-import Err404 from './pages/Err404';
 import { connect } from 'react-redux';
 import { logIn, logOut } from './redux/actions';
 import { getCookie } from './Cookies';
 import Chatroom from './pages/Chatroom';
-import WithLayoutRoute from './components/HOC/withLayoutRoute';
 import Signup from './pages/Signup';
+import SecretRoute from './components/HOC/SecretRoute';
 
 
 class App extends PureComponent {
@@ -30,11 +28,10 @@ class App extends PureComponent {
       return (
         <Router history={history}>
             <Switch>
-              <WithLayoutRoute path="/" component={Home} exact />
-              <Route path="/login" component={Login} />
-              <Route path="/signup" component={Signup} />
-              <WithLayoutRoute path="/chatroom" component={Chatroom} secret/>
-              <WithLayoutRoute component={Err404} />
+              <SecretRoute path="/" component={Chatroom} exact />
+              <Route path="/login" component={Login} exact/>
+              <Route path="/signup" component={Signup} exact/>
+              <Route render={()=><Redirect to='/' />} />
             </Switch>
         </Router>
       );

@@ -4,12 +4,11 @@ import { signupUser } from '../redux/actions/index';
 import SignupForm from '../components/SignupForm';
 import { connect } from 'react-redux';
 
-const Signup = ({location, setLogIn}) => {
+const Signup = ({ signupUser }) => {
     const onSubmit = async (values) => {
-        const path = location.state && location.state.from.pathname || '/' ;
-        await setLogIn(values, path);
+        await signupUser(values);
     }
-    return <SignupForm onSubmit={onSubmit} initialValues={{}}/>
+    return <SignupForm onSubmit={onSubmit}/>
 };
 
 

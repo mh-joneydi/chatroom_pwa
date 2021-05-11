@@ -6,10 +6,9 @@ import { connect } from 'react-redux';
 
 const Login = ({location, setLogIn}) => {
     const onSubmit = async (values) => {
-        const path = location.state && location.state.from.pathname || '/' ;
-        await setLogIn(values, path);
+        await setLogIn(values);
     }
-    return <LoginForm onSubmit={onSubmit} initialValues={{remember : false}}/>
+    return <LoginForm onSubmit={onSubmit}/>
 };
 
 

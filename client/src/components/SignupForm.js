@@ -1,10 +1,12 @@
-import { Avatar, Button, CircularProgress, Container, Grid, Link, TextField, Typography } from '@material-ui/core';
+import { Avatar, Button, CircularProgress, Container, Grid, InputAdornment, Link, TextField, Typography } from '@material-ui/core';
 import { LockOutlined } from '@material-ui/icons';
 import { withStyles } from '@material-ui/styles';
 import React, { Component } from 'react';
 import {Link as routerLink} from 'react-router-dom';
 import { Field , reduxForm } from 'redux-form';
 import ShowAlerts from './ShowAlerts';
+import { users } from '../apis/index'
+import { addAlert } from '../redux/actions';
 
 const styles = {
     gridContainer: {
@@ -45,6 +47,31 @@ class SignupForm extends Component {
             return error;
         }
     }
+    renderUserNameField = ({input , type , label , meta , ...props})=> {
+        const error = this.renderError(meta);
+        return(
+            <TextField
+                fullWidth
+                label={label}
+                variant='outlined'
+                type={type}
+                color='primary'
+                required
+                {...input}
+                {...props}
+                error={!!(error)}
+                helperText={error}
+                className={this.props.classes.helperText}
+                InputProps={{
+                    endAdornment: ( 
+                    <InputAdornment position="end">{ 
+                        meta.asyncValidating && <CircularProgress size={25}/>
+                    }</InputAdornment>
+                    ),
+                }}
+            />
+        )
+    }
     renderField = ({input , type , label , meta , ...props})=> {
         const error = this.renderError(meta);
         return(
@@ -59,12 +86,13 @@ class SignupForm extends Component {
                 {...props}
                 error={!!(error)}
                 helperText={error}
-                className={this.props.helperText}
+                className={this.props.classes.helperText}
             />
         )
     }
-    onSubmit = (formValues)=> {
-        console.log(formValues)
+
+    onSubmit = async formValues=> {
+        await this.props.onSubmit(formValues);
     }
     render() {
         const { handleSubmit, submitting, classes } = this.props;
@@ -80,6 +108,7 @@ class SignupForm extends Component {
                     component='form' 
                     onSubmit={handleSubmit(this.onSubmit)} 
                     noValidate
+                    autoComplete="off"
                 >
                     <Grid item>
                         <ShowAlerts/>
@@ -102,7 +131,7 @@ class SignupForm extends Component {
                                 label="نام کاربری" 
                                 name="username" 
                                 placeholder='like hossein'
-                                component={this.renderField} 
+                                component={this.renderUserNameField} 
                             />
                     </Grid>
                     <Grid item>
@@ -125,7 +154,7 @@ class SignupForm extends Component {
                             <Field 
                                 type="text"
                                 label="نام ( و نام خانوادگی )" 
-                                name="fullName" 
+                                name="name" 
                                 component={this.renderField} 
                             />
                     </Grid>
@@ -155,10 +184,50 @@ class SignupForm extends Component {
 }
 
 const validate = formValues => {
+    const errors = {},
+    { name, password, repeatPassword, username } = formValues;
+    if(!username){
+        errors.username = 'نام کاربری خود را وارد کنید'
+    }
+    if(username && username.length < 3){
+        errors.username = 'حداقل تعداد کاراکتر مورد قبول 3 کاراکتر میباشد'
+    }
+    if(username && username.includes(' ')){
+        errors.username = 'استفاده از فاصله در نام کاربری مجاز نیست'
+    }
+    if(!password){
+        errors.password = 'گذرواژه خود را وارد کنید'
+    }
+    if(password && password.length < 4){
+        errors.password = 'حداقل تعداد کاراکتر مورد قبول 4 کاراکتر میباشد'
+    }
+    if(password && password.includes(' ')){
+        errors.password = 'استفاده از فاصله در گذرواژه مجاز نیست'
+    }
+    if(!repeatPassword){
+        errors.repeatPassword = 'تکرار گذرواژه خود را وارد کنید'
+    }
+    if(repeatPassword!==password){
+        errors.repeatPassword = 'تکرار گذرواژه با گذرواژه برابر نیست'
+    }
+    if(!name){
+        errors.name = 'نام خود را وارد کنید'
+    }
+    return errors;
+}
 
+const asyncValidate = ({ username }) => {
+    return users.get('/users')
+      .then( res=> {
+        const usernames = res.data.map( user => user.username );
+        if ( usernames.includes(username) ) {
+          throw { username: 'این نام کاربری قبلا ثبت شده است' }
+        }
+      })
 }
 
 export default reduxForm({
     form : 'signup',
-    validate
+    validate,
+    asyncValidate
 })(withStyles(styles)(SignupForm));

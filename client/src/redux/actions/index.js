@@ -67,10 +67,9 @@ export const logOut = ()=> dispach=> {
     dispach(clearMessages());
     dispach(clearMembers());
 }
-export const setLogIn = (loginFormValues, path) => async dispach => {
-    const data = await users.get(`?username=${loginFormValues.username}&password=${loginFormValues.password}`).then( res=> res.data)
+export const setLogIn = (loginFormValues) => async dispach => {
+    const data = await users.get(`/users/?username=${loginFormValues.username}&password=${loginFormValues.password}`).then( res=> res.data)
     .catch( err=> {
-        console.log(err);
         dispach(addAlert({name: 'serverError', text: 'خطا در برقراری ارتباط با سرور', severity: 'error', closable: false}))
     })
     
@@ -84,7 +83,7 @@ export const setLogIn = (loginFormValues, path) => async dispach => {
                 
                 dispach(logIn(userInfo));
                 
-                history.push(path);
+                history.push('/');
                 dispach(addAlert({ name: 'login', text: (
                                         <>
                                             <strong>{userInfo.name}</strong> عزیز، خوش آمدید.
@@ -102,12 +101,20 @@ export const setLogIn = (loginFormValues, path) => async dispach => {
     export const setLogOut = () => dispach => {
         deleteCookie('user');
         dispach(logOut());
-        history.push('/');
+        history.push('/login');
         dispach(addAlert({name: 'logout', text: `شما با موفقیت خارج شدید.`}));
     } 
     
-    export const signupUser = () => dispach => {
-
+    export const signupUser = signupFormValues => async dispach => {
+        const { repeatPassword, ...neadedValues } = signupFormValues;
+        await users.post('/users',{...neadedValues, avatar:'/'})
+        .then( res=> {
+            history.push('/login');
+            dispach(addAlert({name: 'signup', text: `ثبت نام با موفقیت انجام شد، وارد شوید`}));
+        })
+        .catch( err=> {
+            dispach(addAlert({name: 'serverError', text: 'خطا در برقراری ارتباط با سرور', severity: 'error', closable: false}))
+        })
     }
     
     /******* USER ACTIONS***********/
@@ -135,7 +142,7 @@ export const setLogIn = (loginFormValues, path) => async dispach => {
     })
 
     export const fetch_members = (currentUserId)=> async(dispach)=> {
-        users.get()
+        users.get("/users")
         .then( res => {
             dispach({
                 type: FETCH_MEMBERS,
