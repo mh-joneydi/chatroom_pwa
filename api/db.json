@@ -19,7 +19,7 @@
       "username": "mehdi",
       "password": "1111",
       "name": "mehdi azimi",
-      "avatar": ""
+      "avatar": "/"
     },
     {
       "username": "mh_joneydi",
@@ -41,6 +41,13 @@
       "name": "حسن جنیدی",
       "avatar": "/",
       "id": 6
+    },
+    {
+      "username": "ali45",
+      "password": "1234",
+      "name": "Ali abdolmaleki",
+      "avatar": "/",
+      "id": 7
     }
   ]
 }

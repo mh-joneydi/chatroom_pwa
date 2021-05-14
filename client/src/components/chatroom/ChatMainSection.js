@@ -1,5 +1,5 @@
 import { CircularProgress, Grid } from '@material-ui/core';
-import back1 from '../../assets/1.jpg'
+import mainBackground from '../../assets/mainBackground2.jpg'
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchMessages } from '../../redux/actions';
@@ -9,10 +9,10 @@ import { withStyles } from '@material-ui/styles';
 const styles = ( theme => ({
     chatMain: {
         flexGrow: 1,
-        backgroundImage: `url(${back1})`,
-        backgroundSize: '650px',
+        backgroundImage: `url(${mainBackground})`,
+        backgroundSize: '500px',
         flexBasis: 1,
-        padding: theme.spacing(1.2),
+        padding: theme.spacing(1.2,2.5),
         overflowY: 'auto',
         '&::-webkit-scrollbar': {
             backgroundColor: theme.palette.primary.light,

@@ -10,6 +10,9 @@ const styles = {
     gridContainer: {
         minHeight : '100vh'
     },
+    header: {
+        marginBottom: '0.65rem'
+    },
     avater: {
         color: '#fff',
         backgroundColor: 'rgb(220, 0, 78)',
@@ -92,7 +95,7 @@ class LoginForm extends PureComponent{
                         <Grid item>
                             <ShowAlerts/>
                         </Grid>
-                        <Grid item xs={12} container direction='column' alignItems='center' spacing={1}>
+                        <Grid item xs={12} container direction='column' alignItems='center' spacing={1} className={classes.header}>
                             <Grid item >
                                 <Avatar className={classes.avater}>
                                     <LockOutlined />

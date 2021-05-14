@@ -62,7 +62,7 @@ const useStyle = makeStyles( theme => ({
         marginTop: 0
     },
     avatarContainer: {
-        width: '50px'
+        width: '55px',
     },
     avatar: {
         margin: '0.1rem',

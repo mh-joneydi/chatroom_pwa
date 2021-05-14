@@ -16,18 +16,13 @@ const useStyle = makeStyles( theme => ({
         color: '#fff',
         margin: '0 1rem'
     },
-    middleSection: {
-        flexGrow: 1,
-        minWidth: 0
-    },
     members: {
-        maxWidth: '100%',
+        width: '100%',
         fontSize: '0.8rem',
         color: '#bcd',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        whiteSpace: 'pre'
-        
+        whiteSpace: 'nowrap'
     },
     actionButtons: {
         width: 'fit-content',
@@ -48,7 +43,7 @@ const ChatHeader = ({members, fetch_members, currentUserId}) => {
                     <Group />
                 </Avatar>
             </Grid>
-            <Grid item container direction='column' className={classes.middleSection}>
+            <Grid item container direction='column' zeroMinWidth>
                 <Grid item component='h3'>
                     گروه چتروم
                 </Grid>

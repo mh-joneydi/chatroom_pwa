@@ -8,18 +8,17 @@ const theme = createMuiTheme({
         light: '#fff',
         chatMain: '#eee'
       },
-      type: 'light',
     },
     overrides: {
       MuiCssBaseline: {
         '@global': {
-          body: {
-            direction: 'rtl',
-          },
           '#root': {
             height: '100vh',
             display: 'flex',
             flexFlow: 'column wrap',
+          },
+          'svg': {
+            verticalAlign: 'middle'
           }
         }
       }

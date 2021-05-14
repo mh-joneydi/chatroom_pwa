@@ -19,20 +19,14 @@ const useStyle =  makeStyles( theme => ({
     },
     
     root: {
-        color: '#fff',
         overflow: 'hidden',
         fontSize: '0.9rem',
         borderRadius: '50px',
-        backgroundColor: fade(theme.palette.primary.light, 0.7),
-        padding: '0.8rem 1.2rem',
+        backgroundColor: '#fff',
+        padding: '0.9rem 1.3rem 0.75rem',
+        lineHeight: '20px',
         height: 'auto!important',
         transition: theme.transitions.create('background-color', {duration : 500}),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.primary.light, 0.8),
-        },
-        '&$focused': {
-            backgroundColor: fade(theme.palette.primary.light, 0.8),
-        },
     },
     focused: {}
 }));
@@ -49,7 +43,7 @@ const ChatSendSection = ({submit}) => {
     }
 
     return (
-        <Grid item container alignItems='center' className={classes.chatSendSection} component='footer'>
+        <Grid item container alignItems='center' wrap='nowrap' className={classes.chatSendSection} component='footer'>
             <Grid item >
                 <IconButton  size='small'><Mood style={{ fontSize: '1.7rem' }}/> </IconButton>
             </Grid>
