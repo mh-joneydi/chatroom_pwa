@@ -9,7 +9,7 @@ const useStyle = makeStyles( theme => ({
         textAlign: 'left',
         backgroundColor: theme.palette.primary.dark,
         color: '#fff',
-        padding: '0.75rem 0.3rem'
+        padding: '0.5rem 0.3rem'
     },
     avatar: {
         background: theme.palette.primary.light,

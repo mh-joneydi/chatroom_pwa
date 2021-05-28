@@ -75,7 +75,7 @@ export const setLogIn = (loginFormValues) => async dispach => {
     
     if(data){
             if(data.length){
-                const {password, ...userInfo} = data.pop();
+                const userInfo = data.pop();
                 
                 const c_expires = loginFormValues.remember ? 10 : 0.18;
                 const c_value = JSON.stringify(userInfo);
@@ -107,7 +107,7 @@ export const setLogIn = (loginFormValues) => async dispach => {
     
     export const signupUser = signupFormValues => async dispach => {
         const { repeatPassword, ...neadedValues } = signupFormValues;
-        await users.post('/users',{...neadedValues, avatar:'/'})
+        await users.post('/users',{...neadedValues, avatar:'/', bio:'Hey there! I am usung Chatroom'})
         .then( res=> {
             history.push('/login');
             dispach(addAlert({name: 'signup', text: `ثبت نام با موفقیت انجام شد، وارد شوید`}));

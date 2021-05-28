@@ -13,7 +13,7 @@ const useStyle = makeStyles(theme=> ({
         [theme.breakpoints.up('sm')]: {
             margin: '1.5rem auto'
         },
-        boxShadow: theme.shadows[5],
+        boxShadow: theme.shadows[4],
     },
     toolbarTitle: {
         marginLeft: 'auto',

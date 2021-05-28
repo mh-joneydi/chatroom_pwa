@@ -19,6 +19,9 @@ const useStyle = makeStyles(theme=> ({
     },
     title: {
         padding: theme.spacing(0,1)
+    },
+    main: {
+        flexGrow: 1
     }
 }));
 
@@ -75,7 +78,7 @@ const SideBarMenu = ({onClose}) => {
                     { renderHeaderTitle(content) }
                 </Grid>
             </Grid>
-            <Grid item>
+            <Grid item className={classes.main}>
                 { renderContnet(content) }
             </Grid>
         </Grid>

@@ -7,7 +7,7 @@ import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
 const useStyle =  makeStyles( theme => ({
     chatSendSection: {
         backgroundColor: theme.palette.primary.main,
-        padding: '0.75rem',
+        padding: '0.6rem',
         '& button, & label ': {
             color: '#bcd',
             margin: '0 0.4rem',
@@ -17,13 +17,12 @@ const useStyle =  makeStyles( theme => ({
         margin: '0 0.5rem',
         flexGrow: 1
     },
-    
     root: {
         overflow: 'hidden',
         fontSize: '0.9rem',
         borderRadius: '50px',
         backgroundColor: '#fff',
-        padding: '0.9rem 1.3rem 0.75rem',
+        padding: '0.85rem 1.3rem 0.7rem',
         lineHeight: '20px',
         height: 'auto!important',
         transition: theme.transitions.create('background-color', {duration : 500}),

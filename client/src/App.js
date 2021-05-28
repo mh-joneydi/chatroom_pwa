@@ -20,8 +20,6 @@ class App extends PureComponent {
     }else {
         props.logOut()
     }
-    this.date = new Date().getTime()
-    console.log(this.date)
   }
 
   render() {

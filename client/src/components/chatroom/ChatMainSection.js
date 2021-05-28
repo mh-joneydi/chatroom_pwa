@@ -1,4 +1,4 @@
-import { CircularProgress, Grid } from '@material-ui/core';
+import { CircularProgress, fade, Grid } from '@material-ui/core';
 import mainBackground from '../../assets/mainBackground2.jpg'
 import React from 'react';
 import { connect } from 'react-redux';
@@ -15,12 +15,10 @@ const styles = ( theme => ({
         padding: theme.spacing(1.2,2.5),
         overflowY: 'auto',
         '&::-webkit-scrollbar': {
-            backgroundColor: theme.palette.primary.light,
-            width: '8px'
+            width: '5px'
         },
         '&::-webkit-scrollbar-thumb': {
-            borderRadius: '5px',
-            backgroundColor: theme.palette.primary.dark
+            backgroundColor: fade(theme.palette.grey[500], 0.6 )
         },
         '&::-webkit-scrollbar-thumb:hover': {
             backgroundColor: theme.palette.primary.main
