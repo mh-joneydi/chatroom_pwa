@@ -1,4 +1,4 @@
-import { Avatar, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, Grid, IconButton, Link, makeStyles, Typography } from '@material-ui/core';
 import { fetch_members } from '../../redux/actions'
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -22,7 +22,11 @@ const useStyle = makeStyles( theme => ({
         color: '#bcd',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        whiteSpace: 'nowrap'
+        whiteSpace: 'nowrap',
+    },
+    member: {
+        cursor: 'pointer',
+        marginRight: theme.spacing(0.6)
     },
     actionButtons: {
         width: 'fit-content',
@@ -47,8 +51,11 @@ const ChatHeader = ({members, fetch_members, currentUserId}) => {
                 <Grid item component='h3'>
                     گروه چتروم
                 </Grid>
-                <Grid item className={classes.members}>
-                    {members.join(' ,')}
+                <Grid item container className={classes.members}>
+                    {members.map( member=> (
+                        <Grid item className={classes.member} onClick={()=>alert(member.id)}>{member.name},</Grid>
+                    ))}
+                    <Grid item>شما</Grid>
                 </Grid>
             </Grid>
             <Grid item container spacing={1} wrap='nowrap' className={classes.actionButtons}>
@@ -68,7 +75,7 @@ const ChatHeader = ({members, fetch_members, currentUserId}) => {
 };
 
 const mapMembersToProps = state => ({
-    members: state.members,
+    members: Object.values(state.members),
     currentUserId: state.user.id
 })
 

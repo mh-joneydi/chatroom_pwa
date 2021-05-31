@@ -10,7 +10,8 @@ import {
     SOCKET_CONNECT,
     SOCKET_DISCONNECT,
     FETCH_MEMBERS,
-    CLEAR_MEMBERS
+    CLEAR_MEMBERS,
+    UPDATE_PROFILE
 } from './types';
 import {
     users,
@@ -116,6 +117,20 @@ export const setLogIn = (loginFormValues) => async dispach => {
             dispach(addAlert({name: 'serverError', text: 'خطا در برقراری ارتباط با سرور', severity: 'error', closable: false}))
         })
     }
+
+    export const updateProfile = (id, userInfo)=> async dispach=> {
+        await users.put(`users/${id}`,userInfo)
+        .then( res=> {
+            setCookie('user',JSON.stringify(res.data));
+            dispach({
+                type: UPDATE_PROFILE,
+                payload: res.data
+            })
+        })
+        .catch( err=> {
+            dispach(addAlert({name: 'serverError', text: 'خطا در برقراری ارتباط با سرور', severity: 'error', closable: true}))
+        })
+    }
     
     /******* USER ACTIONS***********/
 
@@ -146,7 +161,11 @@ export const setLogIn = (loginFormValues) => async dispach => {
         .then( res => {
             dispach({
                 type: FETCH_MEMBERS,
-                payload: [...res.data.filter( user => user.id !== currentUserId ).map( member => member.name), 'شما']
+                payload: Object.fromEntries([...res.data.filter( user => user.id !== currentUserId )
+                    .map( member => {
+                    delete member.password;
+                    return [member.id,member]
+                })])
             })
         })
         .catch( err=> {

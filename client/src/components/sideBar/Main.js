@@ -41,6 +41,13 @@ const useStyle = makeStyles(theme=> ({
         '& svg': {
             color: theme.palette.error.light
         }
+    },
+    secondary: {
+        maxWidth: '250px',
+        overflow: 'hidden',
+        lineHeight: '20px',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap'   
     }
 }));
 
@@ -58,8 +65,9 @@ const Main = ({ userInfo, setLogOut, goToProfile }) => {
                     <Avatar src={userInfo.avatar} alt={userInfo.name} className={classes.avatar} />
                 </ListItemAvatar>
                 <ListItemText
+                    classes={{secondary: classes.secondary}}
                     primary={userInfo.name}
-                    secondary={ userInfo.bio }
+                    secondary={userInfo.bio}
                 />
             </ListItem>
             <ListItem button>

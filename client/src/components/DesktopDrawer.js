@@ -4,7 +4,7 @@ import SideBarMenu from './SideBarMenu';
 
 const useStyle = makeStyles(theme=> ({
     desktopDrawer: {
-        transition: 'width 0.3s cubic-bezier(1,0,.73,.74)',
+        transition: 'width 0.35s cubic-bezier(0.85,.3,.0,.85)',
         width: 0,
         '&.open': {
             width: '500px',

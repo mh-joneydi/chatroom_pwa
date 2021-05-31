@@ -1,10 +1,8 @@
 import { Avatar, Grid, IconButton, InputAdornment, makeStyles, TextField, Typography } from '@material-ui/core';
-import { Check, Edit, EditOutlined, Mood, PhotoCamera } from '@material-ui/icons';
+import { Check, Edit, Mood, PhotoCamera } from '@material-ui/icons';
 import React, { useRef, useState } from 'react';
-import { logIn } from '../../redux/actions';
+import { updateProfile } from '../../redux/actions';
 import { connect } from 'react-redux';
-import { users } from '../../apis';
-import { getCookie, setCookie } from '../../Cookies';
 
 const useStyle = makeStyles( theme=> ({
     main: {
@@ -13,6 +11,7 @@ const useStyle = makeStyles( theme=> ({
     },
     avatarContainer: {
         margin: theme.spacing(4,0),
+        borderRadius: '50%',
         position: 'relative',
         cursor: 'pointer',
         '&:hover': {
@@ -49,10 +48,10 @@ const useStyle = makeStyles( theme=> ({
     },
     fieldsContainer: {
         backgroundColor: '#fff',
-        padding: '0.9rem 1.2rem',
+        padding: '0.9rem 1.5rem',
         '& p': {
             textAlign: 'right',
-            marginBottom: '0.9rem',
+            marginBottom: '1rem',
             color: theme.palette.primary.dark
         },
         '& .MuiInput-underline:before': {
@@ -66,7 +65,7 @@ const useStyle = makeStyles( theme=> ({
         },
         '& svg': {
             color: theme.palette.grey[500],
-            fontSize: '21px'
+            fontSize: '20px'
         }
     },
     helperText: {
@@ -83,32 +82,43 @@ const useStyle = makeStyles( theme=> ({
     }
 }));
 
-const Profile = ({user:{userInfo,id},...props}) => {
+const Profile = ({user:{userInfo,id}, updateProfile}) => {
     const classes = useStyle(),
-    [userInfoFields, setUserInfoFields] = useState({...userInfo}),
+    [fields, setFieldValue] = useState({...userInfo}),
     nameRef = useRef(),
     bioRef = useRef(),
     [nameEditable, setNameEditable] = useState(false),
     [bioEditable, setBioEditable] = useState(false),
     changeHandler = ({target: {name, value}})=> {
-        if(name=="name"&&value.length>25){
+        if((name=="name"&&value.length>25)||(name=="bio"&&value.length>60)){
             return;
         }
-        setUserInfoFields({
-            ...userInfoFields,
+        setFieldValue({
+            ...fields,
             [name]: value
         })
     },
-    submitChanges = ()=> {
-        users.put(`users/${id}`,userInfoFields)
-        setCookie('user',JSON.stringify({...userInfoFields, id, password: userInfoFields.password }));
-        props.logIn(JSON.parse(getCookie('user')));
+    saveName = ()=>{
+        setNameEditable(false);
+        updateProfile(id,{...userInfo, name: fields.name })
+    },
+    saveBio = ()=>{
+        setBioEditable(false);
+        updateProfile(id,{...userInfo, bio: fields.bio })
+    },
+    saveByEnter = (e,value,save)=>{
+        if(e.which===13){
+            e.preventDefault();
+            if(value.length){
+                save();
+            }
+        }
     }
     return (
         <Grid container direction='column' className={classes.main}>
             <Grid item container justify='center'>
                 <Grid item className={classes.avatarContainer}>
-                    <Avatar src={userInfoFields.avatar} alt={userInfoFields.name} className={classes.avatar} />
+                    <Avatar src={fields.avatar} alt={fields.name} className={classes.avatar} />
                     <Grid container direction='column' spacing={1} id='overlay' className={classes.overlay} zeroMinWidth>
                         <Grid item>
                             <PhotoCamera />
@@ -128,8 +138,9 @@ const Profile = ({user:{userInfo,id},...props}) => {
                         fullWidth
                         autoComplete="off"
                         inputRef={nameRef}
-                        value={userInfoFields.name}
-                        error={!userInfoFields.name.length}
+                        onKeyDown={(e)=>saveByEnter(e,fields.name,saveName)}
+                        value={fields.name}
+                        error={!fields.name.length}
                         onChange={changeHandler}
                         focused={nameEditable}
                         InputProps={{
@@ -139,17 +150,14 @@ const Profile = ({user:{userInfo,id},...props}) => {
                                 {
                                     nameEditable? (
                                         <>
-                                            <div className={classes.validLength}>{25-userInfoFields.name.length}</div>
+                                            <div className={classes.validLength}>{25-fields.name.length}</div>
                                             <IconButton size='small'>
                                                 <Mood fontSize='small' />  
                                             </IconButton> 
                                             <IconButton 
                                                 size='small'
-                                                disabled={!userInfoFields.name.length}
-                                                onClick={()=>{
-                                                    setNameEditable(false);
-                                                    submitChanges();
-                                                }}
+                                                disabled={!fields.name.length}
+                                                onClick={saveName}
                                             >
                                                 <Check fontSize='small' />  
                                             </IconButton>
@@ -180,10 +188,13 @@ const Profile = ({user:{userInfo,id},...props}) => {
                         variant='standard'
                         name="bio"
                         fullWidth
+                        multiline
+                        rowsMax={3}
+                        onKeyDown={(e)=>saveByEnter(e,fields.bio,saveBio)}
                         inputRef={bioRef}
                         autoComplete="off"
-                        value={userInfoFields.bio}
-                        error={!userInfoFields.bio.length}
+                        value={fields.bio}
+                        error={!fields.bio.length}
                         onChange={changeHandler}
                         focused={bioEditable}
                         InputProps={{
@@ -193,16 +204,14 @@ const Profile = ({user:{userInfo,id},...props}) => {
                                 {
                                     bioEditable? (
                                         <>
+                                        <div className={classes.validLength}>{60-fields.bio.length}</div>
                                             <IconButton size='small'>
                                                 <Mood fontSize='small' />  
                                             </IconButton> 
                                             <IconButton 
-                                                disabled={!userInfoFields.bio.length}
+                                                disabled={!fields.bio.length}
                                                 size='small'
-                                                onClick={()=>{
-                                                    setBioEditable(false);
-                                                    submitChanges();
-                                                }}
+                                                onClick={saveBio}
                                             >
                                                 <Check fontSize='small' />  
                                             </IconButton>
@@ -233,4 +242,4 @@ const mapUserInfoToProps = state=> ({
     user: state.user
 })
 
-export default connect( mapUserInfoToProps, { logIn })(Profile);
+export default connect( mapUserInfoToProps, { updateProfile })(Profile);
