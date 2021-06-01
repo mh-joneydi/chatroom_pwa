@@ -10,7 +10,7 @@ import MobileDrawer from '../MobileDrawer';
 const useStyle = makeStyles(theme=> ({
     root: {
         flexBasis: '100%',
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up(1300)]: {
             margin: '1.5rem auto'
         },
         boxShadow: theme.shadows[4],
@@ -41,10 +41,9 @@ const Layout = ({ children, width }) => {
             container 
             wrap='nowrap' 
             component={Container} 
-            fixed 
             className={classes.root} 
             disableGutters 
-            maxWidth='xl'
+            maxWidth='lg'
         >
             {
                 isWidthUp('md', width) ? (

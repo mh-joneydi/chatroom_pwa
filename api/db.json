@@ -36,6 +36,14 @@
       "avatar": "/",
       "bio": "00221",
       "id": 5
+    },
+    {
+      "password": "1234",
+      "name": "حسین",
+      "username": "علی",
+      "avatar": "/",
+      "bio": "Hey there! I am usung ",
+      "id": 6
     }
   ]
 }

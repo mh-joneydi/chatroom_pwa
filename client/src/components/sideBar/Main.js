@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 const useStyle = makeStyles(theme=> ({
     root: {
+        paddingBottom: theme.spacing(2),
         '& .MuiListItem-button': {
             padding: theme.spacing(2,3),
             textAlign: 'right',
@@ -53,7 +54,6 @@ const useStyle = makeStyles(theme=> ({
 
 const Main = ({ userInfo, setLogOut, goToProfile }) => {
     const classes= useStyle();
-    console.log(userInfo)
     return (
         <List dir='rtl' disablePadding className={classes.root}>
             <ListItem 

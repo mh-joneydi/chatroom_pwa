@@ -18,10 +18,10 @@ const styles = ( theme => ({
             width: '5px'
         },
         '&::-webkit-scrollbar-thumb': {
-            backgroundColor: fade(theme.palette.grey[500], 0.6 )
+            backgroundColor: fade(theme.palette.grey[600], 0.5 )
         },
         '&::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: theme.palette.primary.main
+            backgroundColor: fade(theme.palette.grey[700], 0.5 )
         }
     },
     loading: {

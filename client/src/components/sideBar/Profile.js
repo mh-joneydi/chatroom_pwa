@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 
 const useStyle = makeStyles( theme=> ({
     main: {
-        height: '100%',
+        minHeight: '100%',
         backgroundColor: theme.palette.grey[200],
+        paddingBottom: theme.spacing(2)
     },
     avatarContainer: {
         margin: theme.spacing(4,0),
@@ -115,7 +116,7 @@ const Profile = ({user:{userInfo,id}, updateProfile}) => {
         }
     }
     return (
-        <Grid container direction='column' className={classes.main}>
+        <Grid container direction='column' wrap='nowrap' className={classes.main}>
             <Grid item container justify='center'>
                 <Grid item className={classes.avatarContainer}>
                     <Avatar src={fields.avatar} alt={fields.name} className={classes.avatar} />

@@ -1,4 +1,4 @@
-import { Grid, IconButton, makeStyles } from '@material-ui/core';
+import { fade, Grid, IconButton, makeStyles } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
 import React, { useState } from 'react';
 import { SideBarMenuContent } from '../constants'
@@ -21,7 +21,17 @@ const useStyle = makeStyles(theme=> ({
         padding: theme.spacing(0,1)
     },
     main: {
-        flexGrow: 1
+        flexGrow: 1,
+        overflowY: 'auto',
+        '&::-webkit-scrollbar': {
+            width: '5px'
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: fade(theme.palette.grey[600], 0.5 )
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: fade(theme.palette.grey[700], 0.5 )
+        }
     }
 }));
 
@@ -57,6 +67,7 @@ const SideBarMenu = ({onClose}) => {
         <Grid 
             container 
             direction='column' 
+            wrap='nowrap'
             className={classes.root} 
         >
             <Grid 
