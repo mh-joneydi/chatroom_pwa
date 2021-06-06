@@ -8,6 +8,7 @@ import { getCookie } from './Cookies';
 import Chatroom from './pages/Chatroom';
 import Signup from './pages/Signup';
 import SecretRoute from './components/HOC/SecretRoute';
+import MainDialog from './components/MainDialog';
 
 
 class App extends PureComponent {
@@ -25,6 +26,7 @@ class App extends PureComponent {
   render() {
       return (
         <Router history={history}>
+            <MainDialog/>
             <Switch>
               <SecretRoute path="/" component={Chatroom} exact />
               <Route path="/login" component={Login} exact/>

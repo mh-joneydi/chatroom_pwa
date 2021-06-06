@@ -1,4 +1,5 @@
-import { createMuiTheme , responsiveFontSizes } from "@material-ui/core";
+import { createMuiTheme , fade, responsiveFontSizes } from "@material-ui/core";
+import { grey } from "@material-ui/core/colors";
 
 const theme = createMuiTheme({
     direction: 'rtl',
@@ -17,8 +18,14 @@ const theme = createMuiTheme({
             display: 'flex',
             flexFlow: 'column wrap',
           },
-          'svg': {
-            verticalAlign: 'middle'
+          '*::-webkit-scrollbar': {
+            width: '5px'
+          },
+          '*::-webkit-scrollbar-thumb': {
+              backgroundColor: fade(grey[600], 0.5 )
+          },
+          '*::-webkit-scrollbar-thumb:hover': {
+              backgroundColor: fade(grey[700], 0.5 )
           }
         }
       }

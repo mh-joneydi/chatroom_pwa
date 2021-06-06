@@ -1,7 +1,7 @@
-import { Avatar, Divider, fade, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
+import { Avatar, Button, Divider, fade, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
 import { Help, Notifications, Settings, BrightnessMedium, Block, ExitToApp } from '@material-ui/icons';
 import React from 'react';
-import { setLogOut } from '../../redux/actions';
+import { setLogOut, openDialog } from '../../redux/actions';
 import { connect } from 'react-redux';
 
 const useStyle = makeStyles(theme=> ({
@@ -24,7 +24,7 @@ const useStyle = makeStyles(theme=> ({
     },
     header: {
         whiteSpace: 'noWrap',
-        padding: '24px!important',
+        padding: '32px!important',
         color: '#333!important'
     },
     avatar: {
@@ -44,7 +44,7 @@ const useStyle = makeStyles(theme=> ({
         }
     },
     secondary: {
-        maxWidth: '250px',
+        maxWidth: '200px',
         overflow: 'hidden',
         lineHeight: '20px',
         textOverflow: 'ellipsis',
@@ -52,7 +52,7 @@ const useStyle = makeStyles(theme=> ({
     }
 }));
 
-const Main = ({ userInfo, setLogOut, goToProfile }) => {
+const Main = ({ userInfo, setLogOut, goToProfile, openDialog }) => {
     const classes= useStyle();
     return (
         <List dir='rtl' disablePadding className={classes.root}>
@@ -105,7 +105,14 @@ const Main = ({ userInfo, setLogOut, goToProfile }) => {
                 <ListItemText primary="پشتیبانی" />
             </ListItem>
             <Divider variant='inset' />
-            <ListItem button onClick={setLogOut} className={classes.logOut}>
+            <ListItem button onClick={()=> openDialog({
+                title: 'خروج از حساب کاربری',
+                content: 'آیا از خروج خود اطمینان دارید؟',
+                onOk: setLogOut,
+                okText: 'خروج',
+                okColor: 'error',
+                cancelColor: 'primary'
+            })} className={classes.logOut}>
                 <ListItemIcon>
                     <ExitToApp />
                 </ListItemIcon>
@@ -119,4 +126,4 @@ const mapUserInfoToProps = state=> ({
     userInfo: state.user.userInfo
 })
 
-export default connect( mapUserInfoToProps, { setLogOut } )(Main);
+export default connect( mapUserInfoToProps, { setLogOut, openDialog } )(Main);

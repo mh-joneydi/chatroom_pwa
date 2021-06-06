@@ -16,19 +16,19 @@ const useStyle = makeStyles({
     }
 })
 
-const Chatroom = ({addMessage, user,socket}) => {
-    const classes = useStyle();
-    const chatMainSection = createRef();
+const Chatroom = ({addMessage, user, socket, reply, cancelReply}) => {
+    const classes = useStyle(),
+    chatMainSection = createRef();
     socket._callbacks.$connecting[0]()
     useEffect(()=> {
         socket.on("newMessage", (message) => {
             addMessage(message);
-            const chatScroll = chatMainSection.current;
-            if ( chatScroll.scrollHeight - 100 <= chatScroll.scrollTop + chatScroll.clientHeight ){
-                $(chatScroll).animate({
-                    scrollTop: chatScroll.scrollHeight
-                }, 200);
-            }
+            // const chatScroll = chatMainSection.current;
+            // if ( chatScroll.scrollHeight - 100 <= chatScroll.scrollTop + chatScroll.clientHeight ){
+            //     $(chatScroll).animate({
+            //         scrollTop: chatScroll.scrollHeight
+            //     }, 200);
+            // }
           })
           return ()=>{
             socket._callbacks.$newMessage = []
@@ -36,12 +36,12 @@ const Chatroom = ({addMessage, user,socket}) => {
     }, [])
 
     const handleSend = (message)=> {
-        if (!message)
-        return;
+        if (!message) return;
         const date = new Date().getTime(),id = date.toString()+user.id,
         newMessage = {
             id,
             message : message,
+            reply,
             from: {
                 id : user.id,
                 name: user.userInfo.name,
@@ -50,12 +50,12 @@ const Chatroom = ({addMessage, user,socket}) => {
             time: date
         }
         addMessage({...newMessage, sending: true});
-        const chatScroll = chatMainSection.current;
-        if ( chatScroll.scrollHeight - 100 >= chatScroll.scrollTop + chatScroll.clientHeight ){
-            $(chatScroll).animate({
-                scrollTop: chatScroll.scrollHeight
-            }, 200);
-        }
+        // const chatScroll = chatMainSection.current;
+        // if ( chatScroll.scrollHeight - 100 >= chatScroll.scrollTop + chatScroll.clientHeight ){
+        //     $(chatScroll).animate({
+        //         scrollTop: chatScroll.scrollHeight
+        //     }, 200);
+        // }
         socket.emit("newMessage", newMessage );
     }
     console.log(chatMainSection.current)
@@ -72,7 +72,8 @@ const Chatroom = ({addMessage, user,socket}) => {
 
 const mapStateToProps = state=> ({
     user: state.user,
-    socket: state.socket
+    socket: state.socket,
+    reply: state.reply
 })
 
 export default connect(mapStateToProps,{ addMessage })(memo(Chatroom));

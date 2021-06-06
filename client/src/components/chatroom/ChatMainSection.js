@@ -13,16 +13,7 @@ const styles = ( theme => ({
         backgroundSize: '500px',
         flexBasis: 1,
         padding: theme.spacing(1.2,2.5),
-        overflowY: 'auto',
-        '&::-webkit-scrollbar': {
-            width: '5px'
-        },
-        '&::-webkit-scrollbar-thumb': {
-            backgroundColor: fade(theme.palette.grey[600], 0.5 )
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: fade(theme.palette.grey[700], 0.5 )
-        }
+        overflowY: 'auto'
     },
     loading: {
         height: '100%',
@@ -60,7 +51,15 @@ class ChatMainSection extends React.PureComponent {
                     </Grid> 
                 }{
                     this.props.messages.map( message=> {
-                        const messageComponent = <ChatMessage key={message.id} userId={this.props.user.id} prevId={prevId}  message={message} />;
+                        const messageComponent = (
+                            <ChatMessage 
+                                key={message.id} 
+                                userId={this.props.user.id} 
+                                prevId={prevId}  
+                                message={message} 
+                                repliedMessage={this.props.getReplyMessage(message.reply)}
+                            />
+                        );
                         prevId = message.from.id
                         return (messageComponent)
                     })
@@ -73,7 +72,8 @@ class ChatMainSection extends React.PureComponent {
 
 const mapStateToProps = state=> ({
     messages: Object.values(state.messages),
-    user: state.user
+    user: state.user,
+    getReplyMessage: (id)=>state.messages[id]
 })
 
 export default connect(mapStateToProps, {fetchMessages})(withStyles(styles)(ChatMainSection));

@@ -25,7 +25,6 @@ const useStyle = makeStyles( theme => ({
         whiteSpace: 'nowrap',
     },
     member: {
-        cursor: 'pointer',
         marginRight: theme.spacing(0.6)
     },
     actionButtons: {
@@ -53,7 +52,7 @@ const ChatHeader = ({members, fetch_members, currentUserId}) => {
                 </Grid>
                 <Grid item container className={classes.members}>
                     {members.map( member=> (
-                        <Grid item className={classes.member} onClick={()=>alert(member.id)}>{member.name},</Grid>
+                        <Grid item className={classes.member}>{member.name},</Grid>
                     ))}
                     <Grid item>شما</Grid>
                 </Grid>

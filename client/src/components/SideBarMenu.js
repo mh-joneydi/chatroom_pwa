@@ -15,23 +15,14 @@ const useStyle = makeStyles(theme=> ({
         padding: theme.spacing(4,1.5,0),
         height: '100px',
         backgroundColor: theme.palette.primary.main,
-        color: '#ddd'
+        color: '#ddd',
     },
     title: {
         padding: theme.spacing(0,1)
     },
     main: {
         flexGrow: 1,
-        overflowY: 'auto',
-        '&::-webkit-scrollbar': {
-            width: '5px'
-        },
-        '&::-webkit-scrollbar-thumb': {
-            backgroundColor: fade(theme.palette.grey[600], 0.5 )
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: fade(theme.palette.grey[700], 0.5 )
-        }
+        overflowY: 'auto'
     }
 }));
 

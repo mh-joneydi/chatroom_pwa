@@ -8,9 +8,7 @@ class ShowAlerts extends Component {
     render() {
         return (
             <Grid item>
-                {
-                    this.props.alerts.map( alert=> (<CustomAlert name={alert.name} severity={alert.severity} text={alert.text} closable={alert.closable}/>) )
-                }
+                {this.props.alerts.map( alert=> (<CustomAlert name={alert.name} severity={alert.severity} text={alert.text} closable={alert.closable}/>) )}
             </Grid>
         );
     }

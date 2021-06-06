@@ -8,7 +8,7 @@ const useStyle = makeStyles({
     alert: {
         direction: 'rtl',
         padding: '0.5rem 1rem',
-        margin: ' 0.75rem',
+        margin: '0.75rem',
         '& div.MuiAlert-icon': {
             marginRight: 0,
             marginLeft: '12px'
@@ -21,7 +21,6 @@ const useStyle = makeStyles({
 })
 
 const CustomAlert = ({deleteAlert, name, severity, text, closable}) => {
-    console.log(closable)
     const [open, setOpen] = useState(false);
     const classes = useStyle();
     const handleClose = alertName=> {

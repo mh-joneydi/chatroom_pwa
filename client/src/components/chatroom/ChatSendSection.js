@@ -1,7 +1,11 @@
-import { fade, Grid, IconButton, makeStyles, TextField } from '@material-ui/core';
-import { Mic, Mood, Send } from '@material-ui/icons';
-import React, { useState } from 'react';
+import { Collapse, Grid, IconButton, makeStyles, TextField } from '@material-ui/core';
+import { Close, Mic, Mood, Send } from '@material-ui/icons';
+import React, { useEffect, useRef, useState } from 'react';
 import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
+import Picker from 'emoji-picker-react';
+import { cancelReply } from '../../redux/actions'
+import { connect } from 'react-redux';
+
 
 
 const useStyle =  makeStyles( theme => ({
@@ -11,6 +15,9 @@ const useStyle =  makeStyles( theme => ({
         '& button, & label ': {
             color: '#bcd',
             margin: '0 0.4rem',
+        },
+        '& button:disabled': {
+            color: theme.palette.common.white
         }
     },
     inputContainer: {
@@ -22,7 +29,7 @@ const useStyle =  makeStyles( theme => ({
         fontSize: '0.9rem',
         borderRadius: '50px',
         backgroundColor: '#fff',
-        padding: '0.85rem 1.3rem 0.7rem',
+        padding: '0.85rem 1.3rem',
         lineHeight: '20px',
         height: 'auto!important',
         transition: theme.transitions.create('background-color', {duration : 500}),
@@ -30,50 +37,117 @@ const useStyle =  makeStyles( theme => ({
     focused: {}
 }));
 
-const ChatSendSection = ({submit}) => {
+const ChatSendSection = ({submit, replyMessage, cancelReply}) => {
     const classes = useStyle(),
+    inputRef = useRef(),
     [messageValue, setMessageValue] = useState(''),
-    handeSubmit = ()=>{
-        submit(messageValue.trim());
-        setMessageValue('')
+    [emojiOpen, setEmojiOpen] = useState(false),
+    handleToggle = () => {
+        setEmojiOpen((prevOpen) => !prevOpen);
+        focusInput();
     },
+    focusInput = ()=>inputRef.current.focus(),
     handleChange = (e)=> {
         setMessageValue(e.target.value)
-    }
+    },
+    onEmojiClick = (e, emojiObject)=> {
+        setMessageValue(messageValue+emojiObject.emoji);
+        focusInput();
+    },
+    [replyOpen, setReplyOpen] = useState(false),
+    closeReplyBar = ()=> {
+        setReplyOpen(false);
+        setTimeout(cancelReply, 350);
+    },
+    
+    handeSubmit = ()=>{
+        submit(messageValue.trim());
+        setMessageValue('');
+        setEmojiOpen(false);
+        closeReplyBar();
+        focusInput();
+    };
+    useEffect(()=> {
+        setReplyOpen(!!replyMessage);
+        focusInput();
+    }, [replyMessage]);
 
     return (
-        <Grid item container alignItems='center' wrap='nowrap' className={classes.chatSendSection} component='footer'>
-            <Grid item >
-                <IconButton  size='small'><Mood style={{ fontSize: '1.7rem' }}/> </IconButton>
-            </Grid>
-            <Grid item>
-                <IconButton component='label' size='small'>
-                    <AttachFileOutlinedIcon style={{ transform: 'rotate(45deg)', fontSize: '1.7rem' }} /> 
-                    <input type='file' style={{ display: 'none' }} />
-                </IconButton>
-            </Grid>
-            <Grid item className={classes.inputContainer}>
-                <TextField 
-                    value={messageValue} 
-                    onChange={handleChange}
-                    multiline
-                    fullWidth
-                    rowsMax={5}
-                    InputProps={{ classes, disableUnderline: true }}
-                    placeholder='Type a message'
+        <footer>
+            <Collapse in={emojiOpen}>
+                <Picker 
+                    onEmojiClick={onEmojiClick} 
+                    disableSearchBar 
+                    disableSkinTonePicker 
+                    native 
+                    preload
+                    pickerStyle={{ boxShadow: 'none', fontFamily: 'sahel', width: '100%' }} 
+                    groupNames={{
+                        smileys_people: 'صورتک ها',
+                        animals_nature: 'حیوانات و طبیعت',
+                        food_drink: 'خوردنی و آشامیدنی',
+                        travel_places: 'سفر به مکان ها',
+                        activities: 'بازی و سرگرمی',
+                        objects: 'اشیاء',
+                        symbols: 'نماد ها',
+                        flags: 'پرچم ها',
+                        recently_used: 'اخیرا استفاده شده',
+                    }}
                 />
-            </Grid>
-            <Grid item>
-                {
-                    !!messageValue.length ? (
-                        <IconButton onClick={handeSubmit} size='small'><Send style={{ fontSize: '1.7rem' }} /> </IconButton>
-                    ) : (
-                        <IconButton  size='small'><Mic style={{ fontSize: '1.7rem' }} /> </IconButton>
-                    )
+            </Collapse>
+            <Collapse in={replyOpen}>
+                {replyMessage&&
+                    <Grid container>
+                        {replyMessage.message}
+                        <IconButton onClick={closeReplyBar}>
+                            <Close/>
+                        </IconButton>
+                    </Grid>
                 }
+            </Collapse>
+            <Grid item container alignItems='center' wrap='nowrap' className={classes.chatSendSection}>
+                { emojiOpen&&
+                    <Grid item >
+                        <IconButton size='small' onClick={handleToggle}><Close style={{ fontSize: '1.7rem' }}/> </IconButton>
+                    </Grid>
+                }
+                <Grid item >
+                    <IconButton size='small' onClick={handleToggle} disabled={emojiOpen}><Mood style={{ fontSize: '1.7rem' }}/> </IconButton>
+                </Grid>
+                <Grid item>
+                    <IconButton component='label' size='small'>
+                        <AttachFileOutlinedIcon style={{ transform: 'rotate(45deg)', fontSize: '1.7rem' }} /> 
+                        <input type='file' style={{ display: 'none' }} />
+                    </IconButton>
+                </Grid>
+                <Grid item className={classes.inputContainer}>
+                    <TextField 
+                        value={messageValue} 
+                        onChange={handleChange}
+                        multiline
+                        inputRef={inputRef}
+                        fullWidth
+                        rowsMax={5}
+                        InputProps={{ classes, disableUnderline: true }}
+                        placeholder='Type a message'
+                    />
+                </Grid>
+                <Grid item>
+                    {
+                        !!messageValue.trim().length ? (
+                            <IconButton onClick={handeSubmit} size='small'><Send style={{ fontSize: '1.7rem' }} /> </IconButton>
+                        ) : (
+                            <IconButton  size='small'><Mic style={{ fontSize: '1.7rem' }} /> </IconButton>
+                        )
+                    }
+                </Grid>
             </Grid>
-        </Grid>
+        </footer>
     );
 };
 
-export default ChatSendSection;
+const mapReplyToProps = state=> ({
+    replyMessage : state.messages[state.reply]
+})
+
+export default connect(mapReplyToProps, { cancelReply } )(ChatSendSection);

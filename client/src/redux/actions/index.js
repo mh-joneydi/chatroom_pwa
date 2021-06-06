@@ -11,7 +11,12 @@ import {
     SOCKET_DISCONNECT,
     FETCH_MEMBERS,
     CLEAR_MEMBERS,
-    UPDATE_PROFILE
+    UPDATE_PROFILE,
+    OPEN_DIALOG,
+    CLOSE_DIALOG,
+    DESTROY_DIALOG,
+    REPLY_MESSAGE,
+    CANCEL_REPLY_MESSAGE
 } from './types';
 import {
     users,
@@ -177,3 +182,38 @@ export const setLogIn = (loginFormValues) => async dispach => {
         type: CLEAR_MEMBERS
     })
     /********** CHATROOM ACTIONS ***********/
+
+
+    /********** DIALOG ACTIONS ***********/
+
+    export const openDialog = dialog => {
+        console.log(dialog)
+    return {type: OPEN_DIALOG,
+        payload: {
+            dialog
+        } }
+    };
+    
+    export const closeDialog = ()=> dispatch=> {
+        dispatch({type: CLOSE_DIALOG});
+        setTimeout(() => {
+            dispatch({type: DESTROY_DIALOG});
+        }, 500);
+        
+    }
+      
+
+    /********** DIALOG ACTIONS ***********/
+
+
+    /********** REPLY MESSAGE ACTIONS ***********/
+
+    export const replyMessage = (id)=> ({
+        type: REPLY_MESSAGE,
+        payload: id
+    });
+    
+    export const cancelReply = ()=> ({ type: CANCEL_REPLY_MESSAGE });
+      
+
+    /********** REPLY MESSAGE ACTIONS ***********/

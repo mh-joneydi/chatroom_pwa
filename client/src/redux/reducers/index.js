@@ -5,6 +5,8 @@ import alertReducer from './alertReducer';
 import chatReducer from './chatReducer';
 import socketReducer from './socketReducer';
 import chatMembersReducer from './chatMembersReducer';
+import dialogReducer from './dialogReducer';
+import chatReplyReducer from './chatReplyReducer';
 
 
 
@@ -14,5 +16,7 @@ export default combineReducers({
     alerts: alertReducer,
     messages: chatReducer,
     socket: socketReducer,
-    members: chatMembersReducer
+    members: chatMembersReducer,
+    dialog: dialogReducer,
+    reply: chatReplyReducer
 });

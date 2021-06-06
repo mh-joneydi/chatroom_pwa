@@ -152,9 +152,9 @@ const Profile = ({user:{userInfo,id}, updateProfile}) => {
                                     nameEditable? (
                                         <>
                                             <div className={classes.validLength}>{25-fields.name.length}</div>
-                                            <IconButton size='small'>
+                                            {/* <IconButton size='small'>
                                                 <Mood fontSize='small' />  
-                                            </IconButton> 
+                                            </IconButton>  */}
                                             <IconButton 
                                                 size='small'
                                                 disabled={!fields.name.length}
@@ -206,9 +206,9 @@ const Profile = ({user:{userInfo,id}, updateProfile}) => {
                                     bioEditable? (
                                         <>
                                         <div className={classes.validLength}>{60-fields.bio.length}</div>
-                                            <IconButton size='small'>
+                                            {/* <IconButton size='small'>
                                                 <Mood fontSize='small' />  
-                                            </IconButton> 
+                                            </IconButton>  */}
                                             <IconButton 
                                                 disabled={!fields.bio.length}
                                                 size='small'

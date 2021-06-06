@@ -3,8 +3,8 @@
     {
       "username": "hossein22",
       "password": "1234",
-      "name": "محمد حسین جنیدی",
-      "bio": "hossein joneydi",
+      "name": "Hossein Joneydi",
+      "bio": "بایوگرافی",
       "avatar": "/",
       "id": 1
     },
@@ -29,13 +29,6 @@
       "avatar": "/",
       "bio": "0021",
       "id": 4
-    },
-    {
-      "username": "ali2",
-      "name": "شمه",
-      "avatar": "/",
-      "bio": "00221",
-      "id": 5
     },
     {
       "password": "1234",
