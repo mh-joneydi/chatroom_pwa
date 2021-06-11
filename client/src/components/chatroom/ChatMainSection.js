@@ -1,4 +1,4 @@
-import { CircularProgress, fade, Grid } from '@material-ui/core';
+import { CircularProgress, Grid } from '@material-ui/core';
 import mainBackground from '../../assets/mainBackground2.jpg'
 import React from 'react';
 import { connect } from 'react-redux';
@@ -44,7 +44,7 @@ class ChatMainSection extends React.PureComponent {
     render() {
         let prevId;
         return (
-            <Grid container item alignContent='flex-start' className={this.props.classes.chatMain} ref={this.props.chatMainSection} component='section'>
+            <Grid container item alignContent='flex-start' className={this.props.classes.chatMain} id='chatMainSection' ref={this.props.chatMainSection} component='section'>
                 {this.state.loading && 
                     <Grid item xs={12} container justify='center' alignItems='center' className={`${this.props.classes.loading}`} style={!!this.props.messages.length? {height: '70px'} : null}>
                         <CircularProgress size={40} />
@@ -64,7 +64,7 @@ class ChatMainSection extends React.PureComponent {
                         return (messageComponent)
                     })
                 }
-                <div style={{ float:"left", clear: "both" }} ref={(el) => { this.messagesEnd = el; }}></div>
+                <div style={{ float:"left", clear: "both" }} id='endOfMessages' ref={(el) => { this.messagesEnd = el; }}></div>
             </Grid>
         )
     }

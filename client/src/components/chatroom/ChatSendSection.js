@@ -1,11 +1,11 @@
-import { Collapse, Grid, IconButton, makeStyles, TextField } from '@material-ui/core';
+import { Collapse, fade, Grid, IconButton, makeStyles, TextField } from '@material-ui/core';
 import { Close, Mic, Mood, Send } from '@material-ui/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
 import Picker from 'emoji-picker-react';
 import { cancelReply } from '../../redux/actions'
 import { connect } from 'react-redux';
-
+import $ from 'jquery';
 
 
 const useStyle =  makeStyles( theme => ({
@@ -34,10 +34,39 @@ const useStyle =  makeStyles( theme => ({
         height: 'auto!important',
         transition: theme.transitions.create('background-color', {duration : 500}),
     },
-    focused: {}
+    chatReplyBar: {
+        padding: '0.5rem 0.6rem',
+        '& button': {
+            margin: '0 0.4rem',
+        },
+    },
+    repliedMessage: {
+        padding: theme.spacing(1.2,2),
+        marginRight: '0.5rem',
+        marginLeft: '65px',
+        backgroundColor: fade(theme.palette.grey[200], 0.5),
+        borderRadius: theme.shape.borderRadius,
+        minWidth: 0,
+        borderLeft: `4px solid ${theme.palette.secondary.main}`,
+        fontSize: '0.8rem',
+        '& h4': {
+            marginBottom: theme.spacing(0.5),
+            color: theme.palette.secondary.main
+        },
+        '& pre': {
+            fontFamily: 'inherit',
+            maxHeight: '40px',
+            overflow: 'hidden',
+            lineHeight: '20px',
+            color: theme.palette.grey[600],
+            textOverflow: 'ellipsis',
+            wordWrap: 'break-word',
+            whiteSpace: 'pre-wrap'
+        },
+    }
 }));
 
-const ChatSendSection = ({submit, replyMessage, cancelReply}) => {
+const ChatSendSection = ({submit, selfId, replyMessage, cancelReply}) => {
     const classes = useStyle(),
     inputRef = useRef(),
     [messageValue, setMessageValue] = useState(''),
@@ -61,6 +90,12 @@ const ChatSendSection = ({submit, replyMessage, cancelReply}) => {
     },
     
     handeSubmit = ()=>{
+        const chatMainSection = $('#chatMainSection'),
+        buttom = document.getElementById('endOfMessages');
+        chatMainSection.animate({
+            scrollTop: buttom.offsetTop
+        }, 500);
+
         submit(messageValue.trim());
         setMessageValue('');
         setEmojiOpen(false);
@@ -95,13 +130,18 @@ const ChatSendSection = ({submit, replyMessage, cancelReply}) => {
                     }}
                 />
             </Collapse>
-            <Collapse in={replyOpen}>
-                {replyMessage&&
-                    <Grid container>
-                        {replyMessage.message}
-                        <IconButton onClick={closeReplyBar}>
-                            <Close/>
-                        </IconButton>
+            <Collapse in={replyOpen} dir='rtl'>
+                { replyMessage&&
+                    <Grid container wrap='nowrap' alignItems='center' className={classes.chatReplyBar}>
+                        <Grid item>
+                            <IconButton onClick={closeReplyBar} size='small'>
+                                <Close/>
+                            </IconButton>
+                        </Grid>
+                        <Grid item container direction='column' className={classes.repliedMessage}>
+                            <Grid item component='h4'>{selfId===replyMessage.from.id?'شما':replyMessage.from.name}</Grid>
+                            <Grid item component='pre'>{replyMessage.message}</Grid>
+                        </Grid>
                     </Grid>
                 }
             </Collapse>
@@ -147,7 +187,8 @@ const ChatSendSection = ({submit, replyMessage, cancelReply}) => {
 };
 
 const mapReplyToProps = state=> ({
-    replyMessage : state.messages[state.reply]
+    replyMessage : state.messages[state.reply],
+    selfId: state.user.id
 })
 
 export default connect(mapReplyToProps, { cancelReply } )(ChatSendSection);

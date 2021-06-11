@@ -13,6 +13,9 @@ const theme = createMuiTheme({
     overrides: {
       MuiCssBaseline: {
         '@global': {
+          'html': {
+            scrollBehavior: 'smooth'
+          },
           '#root': {
             height: '100vh',
             display: 'flex',
