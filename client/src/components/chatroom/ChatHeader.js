@@ -50,7 +50,7 @@ const ChatHeader = ({members, fetch_members, currentUserId}) => {
                 <Grid item component='h3'>
                     گروه چتروم
                 </Grid>
-                <Grid item container className={classes.members}>
+                <Grid item container wrap='nowrap' className={classes.members}>
                     {members.map( member=> (
                         <Grid item className={classes.member}>{member.name},</Grid>
                     ))}

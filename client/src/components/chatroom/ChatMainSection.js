@@ -1,19 +1,27 @@
-import { CircularProgress, Grid } from '@material-ui/core';
+import { CircularProgress, Fab, Grid, Grow } from '@material-ui/core';
 import mainBackground from '../../assets/mainBackground2.jpg'
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchMessages } from '../../redux/actions';
 import ChatMessage from './ChatMessage';
 import { withStyles } from '@material-ui/styles';
+import { scrollToBottom, scrollWithCondition } from '../../Methods';
+import { ExpandMore } from '@material-ui/icons';
 
 const styles = ( theme => ({
-    chatMain: {
+    chatMainContainer: {
         flexGrow: 1,
         backgroundImage: `url(${mainBackground})`,
         backgroundSize: '500px',
-        flexBasis: 1,
-        padding: theme.spacing(1.2,2.5),
-        overflowY: 'auto'
+        position: 'relative',
+    },
+    chatMain: {
+        position: 'absolute',
+        top: 0,
+        height: '100%',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        padding: '1rem 5vw 1rem 3vw',
     },
     loading: {
         height: '100%',
@@ -23,48 +31,92 @@ const styles = ( theme => ({
             color: '#fff',
             padding: theme.spacing(0.3)
         }
+    },
+    fab: {
+        position: 'absolute',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2)
+        
     }
 }))
 
 class ChatMainSection extends React.PureComponent {
     state = {
-        loading : true
+        loading : true,
+        fabShow: false
     }
     async componentDidMount() {
-        this.scrollToBottom();
         await this.props.fetchMessages();
-        this.scrollToBottom();
         this.setState({ loading: false });
+        scrollWithCondition(true)
     }
-    scrollToBottom = () => {
-        const chatSection = this.props.chatMainSection.current;
-        this.messagesEnd.scrollIntoView();
-        chatSection.scrollTop = chatSection.scrollHeight
+    onChatContainerScroll = e=> {
+        const El = e.target;
+        if(El.scrollTop + El.clientHeight <= El.scrollHeight-200){
+            this.setState({ fabShow: true });
+            return;
+        }
+        this.setState({ fabShow: false });
     }
     render() {
-        let prevId;
+        let prevId,
+        classes = this.props.classes;
         return (
-            <Grid container item alignContent='flex-start' className={this.props.classes.chatMain} id='chatMainSection' ref={this.props.chatMainSection} component='section'>
-                {this.state.loading && 
-                    <Grid item xs={12} container justify='center' alignItems='center' className={`${this.props.classes.loading}`} style={!!this.props.messages.length? {height: '70px'} : null}>
-                        <CircularProgress size={40} />
-                    </Grid> 
-                }{
-                    this.props.messages.map( message=> {
-                        const messageComponent = (
-                            <ChatMessage 
-                                key={message.id} 
-                                userId={this.props.user.id} 
-                                prevId={prevId}  
-                                message={message} 
-                                repliedMessage={this.props.getReplyMessage(message.reply)}
-                            />
-                        );
-                        prevId = message.from.id
-                        return (messageComponent)
-                    })
-                }
-                <div style={{ float:"left", clear: "both" }} id='endOfMessages' ref={(el) => { this.messagesEnd = el; }}></div>
+            <Grid 
+                item 
+                container
+                className={classes.chatMainContainer} 
+                component='section'
+            >
+                <Grid
+                    item 
+                    container
+                    alignContent='flex-start' 
+                    className={classes.chatMain} 
+                    id='chatMainSection' 
+                    component='section'
+                    onScroll={this.onChatContainerScroll}
+                >
+
+                    { this.state.loading&& 
+                        <Grid 
+                            item 
+                            xs={12} 
+                            container 
+                            justify='center' 
+                            alignItems='center' 
+                            className={`${classes.loading}`} 
+                            style={!!this.props.messages.length? {height: '70px'} : null}
+                        >
+                            <CircularProgress size={40} />
+                        </Grid> 
+                    }{
+                        this.props.messages.map( message=> {
+                            const messageComponent = (
+                                <ChatMessage 
+                                    key={message.id} 
+                                    userId={this.props.user.id} 
+                                    prevId={prevId}  
+                                    message={message} 
+                                    repliedMessage={this.props.getReplyMessage(message.reply)}
+                                />
+                            );
+                            prevId = message.from.id
+                            return (messageComponent)
+                        })
+                    }
+                    <div style={{ float:"left", clear: "both" }} id='endOfMessages'></div>
+                </Grid>
+                <Grow in={this.state.fabShow}>
+                    <Fab 
+                        onClick={scrollToBottom} 
+                        className={classes.fab} 
+                        size='medium' 
+                        color='primary'
+                    >
+                        <ExpandMore />
+                    </Fab>
+                </Grow>
             </Grid>
         )
     }

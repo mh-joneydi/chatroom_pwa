@@ -5,7 +5,7 @@ import AttachFileOutlinedIcon from '@material-ui/icons/AttachFileOutlined';
 import Picker from 'emoji-picker-react';
 import { cancelReply } from '../../redux/actions'
 import { connect } from 'react-redux';
-import $ from 'jquery';
+import { scrollWithCondition } from '../../Methods';
 
 
 const useStyle =  makeStyles( theme => ({
@@ -46,9 +46,9 @@ const useStyle =  makeStyles( theme => ({
         marginLeft: '65px',
         backgroundColor: fade(theme.palette.grey[200], 0.5),
         borderRadius: theme.shape.borderRadius,
-        minWidth: 0,
         borderLeft: `4px solid ${theme.palette.secondary.main}`,
         fontSize: '0.8rem',
+        overflow: 'hidden',
         '& h4': {
             marginBottom: theme.spacing(0.5),
             color: theme.palette.secondary.main
@@ -56,12 +56,14 @@ const useStyle =  makeStyles( theme => ({
         '& pre': {
             fontFamily: 'inherit',
             maxHeight: '40px',
+            width: '100%',
             overflow: 'hidden',
             lineHeight: '20px',
             color: theme.palette.grey[600],
             textOverflow: 'ellipsis',
             wordWrap: 'break-word',
-            whiteSpace: 'pre-wrap'
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word'
         },
     }
 }));
@@ -90,17 +92,12 @@ const ChatSendSection = ({submit, selfId, replyMessage, cancelReply}) => {
     },
     
     handeSubmit = ()=>{
-        const chatMainSection = $('#chatMainSection'),
-        buttom = document.getElementById('endOfMessages');
-        chatMainSection.animate({
-            scrollTop: buttom.offsetTop
-        }, 500);
-
         submit(messageValue.trim());
         setMessageValue('');
         setEmojiOpen(false);
         closeReplyBar();
         focusInput();
+        scrollWithCondition(true);
     };
     useEffect(()=> {
         setReplyOpen(!!replyMessage);
@@ -138,7 +135,7 @@ const ChatSendSection = ({submit, selfId, replyMessage, cancelReply}) => {
                                 <Close/>
                             </IconButton>
                         </Grid>
-                        <Grid item container direction='column' className={classes.repliedMessage}>
+                        <Grid item container direction='column' className={classes.repliedMessage} zeroMinWidth>
                             <Grid item component='h4'>{selfId===replyMessage.from.id?'شما':replyMessage.from.name}</Grid>
                             <Grid item component='pre'>{replyMessage.message}</Grid>
                         </Grid>

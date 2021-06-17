@@ -17,7 +17,7 @@ const initialState = {
     cancelColor: 'error'
 }
 
-const chatMembersReducer = (state = initialState, {type, payload})=> {
+const dialogReducer = (state = initialState, {type, payload})=> {
     switch(type) {
         case OPEN_DIALOG:
             return { ...initialState, ...payload.dialog, isOpen: true };
@@ -29,4 +29,4 @@ const chatMembersReducer = (state = initialState, {type, payload})=> {
     }
 }
 
-export default chatMembersReducer;
+export default dialogReducer;

@@ -6,11 +6,8 @@ import {
     DELETE_ALL_ALERT,
     FETCH_MESSAGES,
     ADD_MESSAGE,
-    CLEAR_MESSAGES,
     SOCKET_CONNECT,
-    SOCKET_DISCONNECT,
     FETCH_MEMBERS,
-    CLEAR_MEMBERS,
     UPDATE_PROFILE,
     OPEN_DIALOG,
     CLOSE_DIALOG,
@@ -29,10 +26,6 @@ import { setCookie , deleteCookie } from '../../Cookies';
 
     export const socketConnect = ()=> ({
         type: SOCKET_CONNECT,
-    })
-
-    export const socketDisonnect = ()=> ({
-        type: SOCKET_DISCONNECT,
     })
 
 /*********** SOCKET ACTION ***********/
@@ -65,14 +58,9 @@ export const logIn = userInfo=> dispach=> {
     });
     dispach(socketConnect());
 }
-export const logOut = ()=> dispach=> {
-    dispach({
-        type: LOG_OUT,
-    });
-    dispach(socketDisonnect());
-    dispach(clearMessages());
-    dispach(clearMembers());
-}
+export const logOut = ()=> ({
+    type: LOG_OUT,
+});
 export const setLogIn = (loginFormValues) => async dispach => {
     const data = await users.get(`/users/?username=${loginFormValues.username}&password=${loginFormValues.password}`).then( res=> res.data)
     .catch( err=> {
@@ -157,9 +145,6 @@ export const setLogIn = (loginFormValues) => async dispach => {
         type: ADD_MESSAGE,
         payload: message
     });
-    export const clearMessages = ()=> ({
-        type: CLEAR_MESSAGES
-    })
 
     export const fetch_members = (currentUserId)=> async(dispach)=> {
         users.get("/users")
@@ -178,9 +163,6 @@ export const setLogIn = (loginFormValues) => async dispach => {
         })
         
     }
-    export const clearMembers = ()=> ({
-        type: CLEAR_MEMBERS
-    })
     /********** CHATROOM ACTIONS ***********/
 
 

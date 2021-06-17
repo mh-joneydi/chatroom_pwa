@@ -10,7 +10,7 @@ const initialState = {
     userInfo: null
 }
 
-export default (state = initialState , action) => {
+ const userReducer = (state = initialState , action) => {
     switch(action.type) {
         case LOG_IN:
         case UPDATE_PROFILE:
@@ -22,3 +22,5 @@ export default (state = initialState , action) => {
             return state;
     }
 }
+
+export default userReducer;

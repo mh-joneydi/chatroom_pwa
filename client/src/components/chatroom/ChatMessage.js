@@ -11,12 +11,13 @@ const useStyle = makeStyles( theme => ({
         '& .buble': {
             direction: 'rtl',
             borderRadius: '10px',
-            margin: theme.spacing(0.75),
+            margin: theme.spacing(1,0.75),
             width: 'fit-content',
+            minWidth: '100px',
             maxWidth: '70%',
             position: 'relative',
             boxShadow: theme.shadows[1],
-            transition: theme.transitions.create(['background-color','color'],600),
+            transition: theme.transitions.create(['transform'],600),
             '& .time': {
                 fontSize: '0.6rem',
                 padding: theme.spacing(0.75,0,0),
@@ -63,81 +64,82 @@ const useStyle = makeStyles( theme => ({
                     whiteSpace: 'pre-wrap'
                 }
             },
-        },
-        '&.selected .buble': {
-            backgroundColor: theme.palette.primary.light,
-            color: '#fff',
-            '&:before': {
-                backgroundColor: theme.palette.primary.light,
-            }
-        }
-    },
-
-    rightBuble: {
-        color: '#fff',
-        padding: theme.spacing(1,2,0.3,3.5),
-        background: lighten(theme.palette.primary.light, 0.2),
-        '& .reply' : {
-            color: '#fff',
-            left: 0,
-            transform: 'translateX(-5%)',
-        },
-        '&:hover .reply': {
-            transform: 'translateX(20%)'
-        },
-        '& .repliedMessage': {
-            borderRight: `4px solid ${theme.palette.primary.dark}`,
-            backgroundColor: fade(theme.palette.grey[200],0.3),
-            margin: theme.spacing(-0.3,-1.4,1,-2.7),
-            '& h4': {
-                color: theme.palette.primary.dark
+            '&.rightBuble': {
+                color: theme.palette.grey[700],
+                padding: theme.spacing(1,2,0.3,3.5),
+                background: lighten(theme.palette.primary.light, 0.8),
+                '& .reply' : {
+                    color: theme.palette.grey[700],
+                    left: 0,
+                    transform: 'translateX(-5%)',
+                },
+                '& .time': {
+                    color: theme.palette.grey[500],
+                },
+                '&:hover .reply': {
+                    transform: 'translateX(20%)'
+                },
+                '& .repliedMessage': {
+                    borderRight: `4px solid ${theme.palette.primary.dark}`,
+                    backgroundColor: fade(theme.palette.grey[500],0.1),
+                    margin: theme.spacing(-0.3,-1.4,1,-2.7),
+                    '& h4': {
+                        color: theme.palette.primary.dark
+                    },
+                    '& pre': {
+                        color: theme.palette.grey[600],
+                    }
+                }
+        
             },
-            '& pre': {
-                color: theme.palette.grey[200],
-            }
+            '&.leftBuble': {
+                padding: theme.spacing(0.75,3.5,0.75,1.5),
+                textAlign: 'left',
+                background: '#FFF',
+                color: '#666',
+                '& .time': {
+                    marginRight: '-1rem'
+                },
+                '& .reply' : {
+                    color: '#666',
+                    right: 0,
+                    transform: 'translateX(5%)',
+                },
+                '&:hover .reply': {
+                    transform: 'translateX(-20%)'
+                },
+                '& .repliedMessage': {
+                    borderLeft: `4px solid ${theme.palette.secondary.main}`,
+                    backgroundColor: fade(theme.palette.grey[200], 0.5),
+                    margin: theme.spacing(0,-2.7,1,-0.85),
+                    '& h4': {
+                        color: theme.palette.secondary.main
+                    },
+                    '& pre': {
+                        color: theme.palette.grey[600],
+                    }
+                }
+            },
+        },
+        '&.selected .rightBuble': {
+            transform: 'translateX(-20px)'
+        },
+        '&.selected .leftBuble': {
+            transform: 'translateX(20px)'
         }
-
     },
     rightBuble1: {
         borderBottomRightRadius: '7px',
         '&::before': {
             content: "''",
             transform: 'rotate(60deg)',
-            background: lighten(theme.palette.primary.light, 0.2),
+            background: lighten(theme.palette.primary.light, 0.8),
             right: '-2px',
             bottom: '5px',
         },
     },
     rightBuble2: {
         marginTop: '0!important',
-    },
-    leftBuble: {
-        padding: theme.spacing(0.75,3.5,0.75,1.5),
-        textAlign: 'left',
-        background: '#FFF',
-        color: '#666',
-        '& .time': {
-            marginRight: '-1rem'
-        },
-        '& .reply' : {
-            color: '#666',
-            right: 0,
-            transform: 'translateX(5%)',
-        },
-        '&:hover .reply': {
-            transform: 'translateX(-20%)'
-        },
-        '& .repliedMessage': {
-            borderLeft: `4px solid ${theme.palette.secondary.main}`,
-            backgroundColor: fade(theme.palette.grey[200], 0.5),
-            margin: theme.spacing(0,-2.7,1,-0.85),
-            '& h4': {
-                color: theme.palette.secondary.main
-            },
-            '& pre': {
-                color: theme.palette.grey[600],
-            }
-        }
     },
     leftBuble1: {
         '&::before': {
@@ -163,7 +165,7 @@ const useStyle = makeStyles( theme => ({
     },
     sendStatus: {
         paddingLeft: theme.spacing(0.75),
-        color: '#ddd',
+        color: theme.palette.grey[500],
         '& svg': {
             fontSize: '16px',
         }
@@ -181,7 +183,7 @@ const ChatMessage = ({message, userId, prevId, replyMessage, repliedMessage}) =>
     scrollToViewRepliedMessage = (id)=>{
         const el = document.getElementById(id);
         $('#chatMainSection').animate({
-            scrollTop: el.offsetTop-300
+            scrollTop: el.offsetTop-100
         }, 300, ()=> {
             el.classList.add('selected');
             setTimeout( ()=>{
@@ -193,14 +195,23 @@ const ChatMessage = ({message, userId, prevId, replyMessage, repliedMessage}) =>
         <>
             {
                 userId === message.from.id ? (
-                    <Grid item container direction='row-reverse' xs={12} id={message.id} className={classes.message} onDoubleClick={(e)=>{
-                        e.preventDefault()
-                        replyMessage(message.id)}}>
+                    <Grid 
+                        item 
+                        container 
+                        direction='row-reverse' 
+                        xs={12} 
+                        id={message.id} 
+                        className={classes.message} 
+                        onDoubleClick={(e)=>{
+                            e.preventDefault()
+                            replyMessage(message.id)}
+                        }
+                    >
                         <Grid 
                             item 
                             container 
                             direction='column' 
-                            className={`buble ${classes.rightBuble} ${prevId === message.from.id ? classes.rightBuble2 : classes.rightBuble1}`} 
+                            className={`buble rightBuble ${prevId === message.from.id ? classes.rightBuble2 : classes.rightBuble1}`} 
                         >
                             { repliedMessage&&
                                 <Grid 
@@ -245,7 +256,15 @@ const ChatMessage = ({message, userId, prevId, replyMessage, repliedMessage}) =>
                         </Grid>
                     </Grid>
                 ) : (
-                    <Grid item container xs={12} alignItems='flex-end' id={message.id} className={classes.message} onDoubleClick={()=>replyMessage(message.id)}>
+                    <Grid 
+                        item 
+                        container 
+                        xs={12} 
+                        alignItems='flex-end' 
+                        id={message.id} 
+                        className={classes.message} 
+                        onDoubleClick={()=>replyMessage(message.id)}
+                    >
                         <Grid item className={classes.avatarContainer}>
                             {
                                 prevId !== message.from.id && <Avatar src={message.from.avatar} alt={message.from.name} className={classes.avatar} />
@@ -255,7 +274,7 @@ const ChatMessage = ({message, userId, prevId, replyMessage, repliedMessage}) =>
                             item 
                             container 
                             direction='column' 
-                            className={`buble ${classes.leftBuble} ${prevId === message.from.id ? classes.leftBuble2 : classes.leftBuble1}`}
+                            className={`buble leftBuble ${prevId === message.from.id ? classes.leftBuble2 : classes.leftBuble1}`}
                         >
                             {
                                 prevId !== message.from.id &&

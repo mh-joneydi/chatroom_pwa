@@ -1,13 +1,14 @@
 import { makeStyles } from '@material-ui/styles';
-import React, { createRef, memo, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import ChatMainSection from '../components/chatroom/ChatMainSection';
 import ChatHeader from '../components/chatroom/ChatHeader';
 import ChatSendSection from '../components/chatroom/ChatSendSection';
 import { Grid } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { addMessage } from '../redux/actions';
-import $ from 'jquery';
-import Layout from '../components/layout'
+import Layout from '../components/layout';
+import { scrollWithCondition } from '../Methods';
+
 
 const useStyle = makeStyles({
     chatroom: {
@@ -16,19 +17,14 @@ const useStyle = makeStyles({
     }
 })
 
-const Chatroom = ({addMessage, user, socket, reply, cancelReply}) => {
-    const classes = useStyle(),
-    chatMainSection = createRef();
+const Chatroom = ({addMessage, user, socket, reply}) => {
+    const classes = useStyle();
     socket._callbacks.$connecting[0]()
+    
     useEffect(()=> {
         socket.on("newMessage", (message) => {
             addMessage(message);
-            // const chatScroll = chatMainSection.current;
-            // if ( chatScroll.scrollHeight - 100 <= chatScroll.scrollTop + chatScroll.clientHeight ){
-            //     $(chatScroll).animate({
-            //         scrollTop: chatScroll.scrollHeight
-            //     }, 200);
-            // }
+            scrollWithCondition();
           })
           return ()=>{
             socket._callbacks.$newMessage = []
@@ -50,20 +46,13 @@ const Chatroom = ({addMessage, user, socket, reply, cancelReply}) => {
             time: date
         }
         addMessage({...newMessage, sending: true});
-        // const chatScroll = chatMainSection.current;
-        // if ( chatScroll.scrollHeight - 100 >= chatScroll.scrollTop + chatScroll.clientHeight ){
-        //     $(chatScroll).animate({
-        //         scrollTop: chatScroll.scrollHeight
-        //     }, 200);
-        // }
         socket.emit("newMessage", newMessage );
     }
-    console.log(chatMainSection.current)
     return (
         <Layout>
             <Grid container direction='column' className={classes.chatroom} >
                 <ChatHeader />
-                <ChatMainSection chatMainSection={chatMainSection} />
+                <ChatMainSection />
                 <ChatSendSection submit={handleSend}/>
             </Grid>
         </Layout>

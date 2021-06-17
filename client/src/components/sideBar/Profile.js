@@ -101,11 +101,13 @@ const Profile = ({user:{userInfo,id}, updateProfile}) => {
     },
     saveName = ()=>{
         setNameEditable(false);
-        updateProfile(id,{...userInfo, name: fields.name })
+        setFieldValue({ ...fields, name: fields.name.trim() });
+        updateProfile(id,{...userInfo, name: fields.name.trim() })
     },
     saveBio = ()=>{
         setBioEditable(false);
-        updateProfile(id,{...userInfo, bio: fields.bio })
+        setFieldValue({ ...fields, bio: fields.bio.trim() });
+        updateProfile(id,{...userInfo, bio: fields.bio.trim() })
     },
     saveByEnter = (e,value,save)=>{
         if(e.which===13){

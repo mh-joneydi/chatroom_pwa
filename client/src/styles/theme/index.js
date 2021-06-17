@@ -21,6 +21,10 @@ const theme = createMuiTheme({
             display: 'flex',
             flexFlow: 'column wrap',
           },
+          '*':{
+            "scrollbarColor": `${fade(grey[600], 0.5 )} transparent`,
+            "scrollbarWidth": 'thin',
+          },
           '*::-webkit-scrollbar': {
             width: '5px'
           },
@@ -29,6 +33,9 @@ const theme = createMuiTheme({
           },
           '*::-webkit-scrollbar-thumb:hover': {
               backgroundColor: fade(grey[700], 0.5 )
+          },
+          '.emoji-picker-react .emoji-group:first-child': {
+            display: 'none'
           }
         }
       }

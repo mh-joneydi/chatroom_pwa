@@ -7,10 +7,11 @@ import socketReducer from './socketReducer';
 import chatMembersReducer from './chatMembersReducer';
 import dialogReducer from './dialogReducer';
 import chatReplyReducer from './chatReplyReducer';
+import { LOG_OUT } from '../actions/types'
 
 
 
-export default combineReducers({
+const appReducer = combineReducers ({
     form: formReducer,
     user: userReducer,
     alerts: alertReducer,
@@ -20,3 +21,13 @@ export default combineReducers({
     dialog: dialogReducer,
     reply: chatReplyReducer
 });
+
+const rootReducer = (state, action) => {   
+    if(action.type === LOG_OUT) {
+        return appReducer(undefined, action);
+    }
+
+    return appReducer(state, action);
+};
+
+export default rootReducer;
