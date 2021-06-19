@@ -31,7 +31,7 @@ const useStyle = makeStyles( theme => ({
                 transition: theme.transitions.create('background-color',600),
             },
             '& pre': {
-                fontFamily: 'Sahel',
+                fontFamily: 'inherit',
                 wordBreak: 'break-word',
                 whiteSpace: 'pre-wrap'
             },
@@ -139,7 +139,7 @@ const useStyle = makeStyles( theme => ({
         },
     },
     rightBuble2: {
-        marginTop: '0!important',
+        marginTop: '-4px!important',
     },
     leftBuble1: {
         '&::before': {
@@ -151,7 +151,7 @@ const useStyle = makeStyles( theme => ({
         },
     },
     leftBuble2: {
-        marginTop: '0!important',
+        marginTop: '-4px!important',
     },
     avatarContainer: {
         width: '55px',

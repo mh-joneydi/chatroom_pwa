@@ -21,7 +21,7 @@ const styles = ( theme => ({
         height: '100%',
         overflowY: 'auto',
         overflowX: 'hidden',
-        padding: '1rem 5vw 1rem 3vw',
+        padding: '1rem 4.5vw 1rem 3vw',
     },
     loading: {
         height: '100%',
@@ -34,9 +34,9 @@ const styles = ( theme => ({
     },
     fab: {
         position: 'absolute',
-        bottom: theme.spacing(2),
-        right: theme.spacing(2)
-        
+        bottom: theme.spacing(1.8),
+        right: theme.spacing(1.5),
+        color: '#bcd',
     }
 }))
 
@@ -111,7 +111,7 @@ class ChatMainSection extends React.PureComponent {
                     <Fab 
                         onClick={scrollToBottom} 
                         className={classes.fab} 
-                        size='medium' 
+                        size='small' 
                         color='primary'
                     >
                         <ExpandMore />
