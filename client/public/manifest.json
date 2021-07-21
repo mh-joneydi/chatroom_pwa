@@ -1,6 +1,7 @@
 {
+  "name": "Chatroom",
   "short_name": "Chatroom",
-  "name": "persian Chatroom",
+  "scope": ".",
   "icons": [
     {
       "src": "favicon.ico",
@@ -19,7 +20,9 @@
     }
   ],
   "start_url": ".",
+  "display_override": ["window-control-overlay", "minimal-ui"],
   "display": "standalone",
   "theme_color": "#3f51b5",
+  "lang": "fa",
   "background_color": "#ffffff"
 }

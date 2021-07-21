@@ -21,6 +21,7 @@ import {
 } from '../../apis';
 import history from '../../history';
 import { setCookie , deleteCookie } from '../../Cookies';
+import { notificationStatus } from '../../Methods';
 
 /*********** SOCKET ACTION ***********/
 
@@ -78,14 +79,54 @@ export const setLogIn = (loginFormValues) => async dispach => {
                 dispach(logIn(userInfo));
                 
                 history.push('/');
-                dispach(addAlert({ name: 'login', text: (
-                                        <>
-                                            <strong>{userInfo.name}</strong> عزیز، خوش آمدید.
-                                        </>
-                                    )
-                                }   
-                    ));
-                    
+                dispach(addAlert({ 
+                    name: 'login', 
+                    text: (<> <strong>{userInfo.name}</strong> عزیز، خوش آمدید.</>)
+                }));
+
+                if( "serviceWorker" in navigator && "PushManager" in window) {
+
+                    const getPushSubscription = async()=> {
+                        const SWR = await navigator.serviceWorker.ready;
+                        const currentPushSubscription = await SWR.pushManager.getSubscription();
+                        if(currentPushSubscription) {
+                            return currentPushSubscription;
+                        }
+                        const publicKey = "BIbOczyYWtYUu8-onktE2CIrEFqJbj1GrTLkLNCsZlj6px556_9Xxv05ssusox2lmUPpXIgRAmQDnNEnJQi-nsg";
+                        const options = {
+                            userVisibleOnly: true,
+                            applicationServerKey: publicKey
+                        }
+                        return await SWR.pushManager.subscribe(options)
+                    }   
+                    const currentNotificationPermissionState = await notificationStatus();
+                    if(currentNotificationPermissionState === "prompt") {
+
+                        const requestPermission = async()=> {
+                            const result = Notification.requestPermission();
+                            if(result === "granted") {
+                                // send push-subscription to server
+                                console.log(await getPushSubscription());
+                            }
+                        }
+
+                        setTimeout(function(){
+                            dispach(openDialog({
+                                title: "آیا مایل به فعال سازی اعلانات هستید؟",
+                                content: 'برای فعال کردن نوتیفیکیشن، روی فعال سازی کلیک کنید و در مرحله بعد روی دکمه Allow کلیک کنید.',
+                                onOk: requestPermission,
+                                okText: "فعال سازی",
+                                okColor: 'primary',
+                                cancelText: "بعدا",
+                                cancelColor: 'secondaryAction'
+                            }))
+                        }, 3000)
+                    } else if(currentNotificationPermissionState === "granted") {
+                        // send push-subscription to server
+                        console.log(await getPushSubscription());
+                    }
+                }
+
             }else {
                 dispach(addAlert({name: 'userInvalid',text: 'نام کاربری یا رمز عبور اشتباه است',severity: 'error', closable: false}));
                 
@@ -169,11 +210,10 @@ export const setLogIn = (loginFormValues) => async dispach => {
     /********** DIALOG ACTIONS ***********/
 
     export const openDialog = dialog => {
-        console.log(dialog)
-    return {type: OPEN_DIALOG,
-        payload: {
-            dialog
-        } }
+        return ({
+            type: OPEN_DIALOG,
+            payload: {dialog} 
+        })
     };
     
     export const closeDialog = ()=> dispatch=> {

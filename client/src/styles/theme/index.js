@@ -9,6 +9,9 @@ const theme = createMuiTheme({
         light: '#fff',
         chatMain: '#eee'
       },
+      secondaryAction: {
+        main: 'rgba(0,0,0,0.5)'
+      }
     },
     overrides: {
       MuiCssBaseline: {
@@ -34,9 +37,6 @@ const theme = createMuiTheme({
           '*::-webkit-scrollbar-thumb:hover': {
               backgroundColor: fade(grey[700], 0.5 )
           },
-          '.emoji-picker-react .emoji-group:first-child': {
-            display: 'none'
-          }
         }
       }
     },

@@ -11,7 +11,7 @@ const useStyle = makeStyles( theme=> ({
         }
     },
     content: {
-        padding: theme.spacing(2,3)
+        padding: theme.spacing(1,3)
     },
     actions: {
         '& button': {
@@ -35,7 +35,6 @@ const MainDialog = ({ dialog, closeDialog }) => {
             dir='rtl'
       >
           {dialog.title&&<DialogTitle className={classes.header}>{dialog.title}</DialogTitle>}
-          {dialog.title&&dialog.content&&<Divider variant='middle'/>}
           {dialog.content&&
           <DialogContent className={classes.content}>
             {typeof dialog.content === 'string' ? (

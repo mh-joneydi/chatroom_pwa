@@ -30,6 +30,14 @@
       "avatar": "/",
       "bio": "تست بایوگرافی",
       "id": 4
+    },
+    {
+      "password": "1234",
+      "name": "lpln osdk",
+      "username": "hossein2",
+      "avatar": "/",
+      "bio": "Hey there! I am usung Chatroom",
+      "id": 5
     }
   ]
 }

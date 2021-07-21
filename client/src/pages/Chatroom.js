@@ -25,12 +25,12 @@ const Chatroom = ({addMessage, user, socket, reply}) => {
         socket.on("newMessage", (message) => {
             addMessage(message);
             scrollWithCondition();
-          })
-          return ()=>{
+        })
+        return ()=>{
             socket._callbacks.$newMessage = []
-          }
+        }
     }, [])
-
+    
     const handleSend = (message)=> {
         if (!message) return;
         const date = new Date().getTime(),id = date.toString()+user.id,
@@ -46,7 +46,24 @@ const Chatroom = ({addMessage, user, socket, reply}) => {
             time: date
         }
         addMessage({...newMessage, sending: true});
-        socket.emit("newMessage", newMessage );
+        if("serviceWorker" in navigator && "SyncManager" in window) {
+            const bc = new BroadcastChannel('sync');
+            bc.onmessage = (e)=> {
+                socket.emit("newMessage", newMessage );
+            }
+            navigator.serviceWorker.ready
+            .then( swr=> {
+                swr.sync.register('EMIT_NEW_MESSAGE')
+                .catch( err=> {
+                    socket.emit("newMessage", newMessage );
+                })
+            })
+            .catch( err=> {
+                socket.emit("newMessage", newMessage );
+            })
+        } else {
+            socket.emit("newMessage", newMessage );
+        }
     }
     return (
         <Layout>
