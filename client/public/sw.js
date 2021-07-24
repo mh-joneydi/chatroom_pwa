@@ -32,36 +32,38 @@ self.addEventListener('activate', event=> {
 
 
 self.addEventListener('fetch', event=> {
-        if(!/socket.io/.test(event.request.url)){
-            if((/api|\/users/gi).test(event.request.url)||true){
-                // network first
-                event.respondWith(
-                    fetch(event.request)
-                        .then( netResponse=> {
-                            return caches.open(CURRENT_CACHES.dynamic).then( cache=> {
-                                cache.put(event.request, netResponse.clone());
-                                return netResponse;
-                            })
+
+        // check if request is made by chrome extensions or web page or web socket
+        if (!(/http(s?)/gi).test(event.request.url) || /socket.io/.test(event.request.url) ) return;
+        
+        // network first or apis
+        if((/api|\/users/gi).test(event.request.url)){
+            event.respondWith(
+                fetch(event.request)
+                    .then( netResponse=> {
+                        return caches.open(CURRENT_CACHES.dynamic).then( cache=> {
+                            cache.put(event.request, netResponse.clone());
+                            return netResponse;
                         })
-                        .catch( err=> {
-                            console.log(err)
-                            return caches.match(event.request);
+                    })
+                    .catch( err=> {
+                        console.log(err)
+                        return caches.match(event.request);
+                    })
+            )
+        } else {
+            // cache first for any request
+            event.respondWith(
+                caches.match(event.request).then( response=> {
+                    if(response) return response;
+                    return fetch(event.request).then( netResponse=> {
+                        caches.open(CURRENT_CACHES.dynamic).then( cache=> {
+                            cache.put(event.request, netResponse.clone());
+                            return netResponse;
                         })
-                )
-            } else {
-                // cache first
-                event.respondWith(
-                    caches.match(event.request).then( response=> {
-                        if(response) return response;
-                        return fetch(event.request).then( netResponse=> {
-                            caches.open(CURRENT_CACHES.dynamic).then( cache=> {
-                                cache.put(event.request, netResponse.clone());
-                                return netResponse;
-                            })
-                        })
-                    })   
-                )
-            }
+                    })
+                })   
+            )
         }
 })
 
