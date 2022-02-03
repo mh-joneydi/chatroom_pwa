@@ -1,4 +1,4 @@
-# Chatroom PWA with React & Node JS
+# Chatroom PWA
 
 ## screenshots:
 
@@ -16,4 +16,5 @@
 
 ## info
 This project is a chatroom project in which socket and rest apis technology is used and its front-end part is implemented using **react** and its back-end is implemented with **node js**.
+
 **Its database is mock**
